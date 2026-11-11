@@ -1,0 +1,10 @@
+node_modules/
+dist/
+target/
+!contracts/target/wasm32-unknown-unknown/release/clearpass_contract.wasm
+.env
+*.log
+.DS_Store
+Thumbs.db
+clearpass.zip
+_zip_export_temp/

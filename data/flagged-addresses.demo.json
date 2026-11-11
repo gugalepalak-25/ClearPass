@@ -1,0 +1,117 @@
+{
+  "version": "2026.11-v1.4",
+  "updatedAt": "2026-11-12T00:00:00Z",
+  "metadata": {
+    "source": "ClearPass Synthetic Intelligence Engine",
+    "description": "Configurable synthetic risk dataset for local testing and demonstration. Contains clearly labelled simulated entities for mixers, ransomware, sanctioned entities, phishing, and high-risk counterparties.",
+    "disclaimer": "DEMO RISK DATASET: Strictly for testing and demonstration of risk evaluation rules. These are synthetic test addresses and must never be presented as real-world verified criminal intelligence.",
+    "network": "near-testnet"
+  },
+  "riskWeights": {
+    "directMatch": 85,
+    "oneHop": 45,
+    "twoHop": 25,
+    "threeHop": 10
+  },
+  "categories": {
+    "sanctions_simulation": { "baseScore": 95, "severity": "CRITICAL", "description": "Simulated entity on international sanctions watchlists" },
+    "mixer_simulation": { "baseScore": 90, "severity": "HIGH", "description": "Simulated non-compliant fund pooling / anonymization service" },
+    "theft_simulation": { "baseScore": 90, "severity": "HIGH", "description": "Simulated source or recipient of illicitly obtained funds" },
+    "phishing_simulation": { "baseScore": 85, "severity": "HIGH", "description": "Simulated malicious domain and credential harvesting entity" },
+    "high_risk_exchange_simulation": { "baseScore": 60, "severity": "MEDIUM", "description": "Simulated exchange entity without verified KYC controls" }
+  },
+  "entities": [
+    {
+      "address": "flagged-mixer-demo.testnet",
+      "category": "mixer_simulation",
+      "severity": "HIGH",
+      "label": "Tornado-style Mixer Pool Demo",
+      "riskScore": 90,
+      "flaggedSince": "2024-01-15T00:00:00Z",
+      "notes": "Synthetic address representing high-volume obfuscation contract"
+    },
+    {
+      "address": "flagged-theft-demo.testnet",
+      "category": "theft_simulation",
+      "severity": "CRITICAL",
+      "label": "Simulated Bridge Exploit Drainer",
+      "riskScore": 95,
+      "flaggedSince": "2024-03-20T00:00:00Z",
+      "notes": "Synthetic address representing compromised protocol drain wallet"
+    },
+    {
+      "address": "flagged-sanction-demo.testnet",
+      "category": "sanctions_simulation",
+      "severity": "CRITICAL",
+      "label": "Simulated Designated National Entity",
+      "riskScore": 100,
+      "flaggedSince": "2023-11-01T00:00:00Z",
+      "notes": "Synthetic address representing sanctioned jurisdiction entity"
+    },
+    {
+      "address": "flagged-phishing-demo.testnet",
+      "category": "phishing_simulation",
+      "severity": "HIGH",
+      "label": "Fake DEX Approval Drainer",
+      "riskScore": 85,
+      "flaggedSince": "2024-06-10T00:00:00Z",
+      "notes": "Synthetic address representing malicious permit approval contract"
+    },
+    {
+      "address": "flagged-highrisk-demo.testnet",
+      "category": "high_risk_exchange_simulation",
+      "severity": "MEDIUM",
+      "label": "Unlicensed Instant Swap Service",
+      "riskScore": 65,
+      "flaggedSince": "2024-08-01T00:00:00Z",
+      "notes": "Synthetic address representing high-risk unhosted counterparty"
+    },
+    {
+      "address": "e145b238a892f39d91f24d77bb451e0892c57801df07f79435b5a2bf75e65d21",
+      "category": "mixer_simulation",
+      "severity": "HIGH",
+      "label": "Synthetic 64-char Hex Flagged Address",
+      "riskScore": 90,
+      "flaggedSince": "2024-02-14T00:00:00Z",
+      "notes": "Synthetic implicit account address used for testing hex identifier matching"
+    }
+  ],
+  "demoScenarios": {
+    "scenario_low_risk": {
+      "id": "scenario_low_risk",
+      "name": "Scenario 1: Low-Risk Wallet",
+      "account": "alice-clean-demo.testnet",
+      "description": "Synthetic or real test wallet with no matching indicators within the assessment scope.",
+      "expectedOutcome": "APPROVED",
+      "expectedScore": 5,
+      "mockHistory": [
+        { "hash": "tx_mock_clean_1", "counterparty": "bob-merchant.testnet", "amountNear": 12.5, "direction": "OUT", "timestamp": "2026-11-10T14:22:00Z", "token": "NEAR" },
+        { "hash": "tx_mock_clean_2", "counterparty": "staking-pool.testnet", "amountNear": 50.0, "direction": "OUT", "timestamp": "2026-11-08T09:15:00Z", "token": "NEAR" },
+        { "hash": "tx_mock_clean_3", "counterparty": "ref-finance-demo.testnet", "amountNear": 5.0, "direction": "IN", "timestamp": "2026-11-05T18:40:00Z", "token": "USDT.e" }
+      ]
+    },
+    "scenario_flagged": {
+      "id": "scenario_flagged",
+      "name": "Scenario 2: Flagged Wallet",
+      "account": "charlie-compromised-demo.testnet",
+      "description": "Synthetic demo wallet directly interacting with flagged-mixer-demo.testnet within 1 hop.",
+      "expectedOutcome": "REJECTED",
+      "expectedScore": 88,
+      "mockHistory": [
+        { "hash": "tx_mock_flagged_1", "counterparty": "flagged-mixer-demo.testnet", "amountNear": 100.0, "direction": "IN", "timestamp": "2026-11-09T22:10:00Z", "token": "NEAR", "flagged": true },
+        { "hash": "tx_mock_flagged_2", "counterparty": "dex-trader.testnet", "amountNear": 20.0, "direction": "OUT", "timestamp": "2026-11-07T11:00:00Z", "token": "NEAR" }
+      ]
+    },
+    "scenario_inconclusive": {
+      "id": "scenario_inconclusive",
+      "name": "Scenario 3: Insufficient Information",
+      "account": "unknown-dormant-demo.testnet",
+      "description": "Wallet with unresolvable state, empty indexer records, or incomplete history exceeding allowable confidence threshold.",
+      "expectedOutcome": "INCONCLUSIVE",
+      "expectedScore": 48,
+      "mockHistory": [],
+      "reason": "Insufficient transaction records to verify fund provenance. Indexer depth incomplete."
+    }
+  }
+}
+
