@@ -17,7 +17,7 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    host: '127.0.0.1',
+    host: true, // listens on all local addresses (localhost, 127.0.0.1, IPv6)
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:3001',

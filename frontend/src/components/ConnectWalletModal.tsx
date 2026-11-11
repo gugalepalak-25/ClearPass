@@ -392,3 +392,4 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, 
     </AnimatePresence>
   );
 };
+

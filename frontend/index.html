@@ -1,16 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #030712; color: #f8fafc;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; media-src 'self' https: blob: data:; worker-src 'self' blob:; connect-src 'self' http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:* https: blob: data:; img-src 'self' data: https:;" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; media-src 'self' https: blob: data:; worker-src 'self' blob:; connect-src 'self' http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:* ws: wss: https: blob: data:; img-src 'self' data: https:;" />
     <title>ClearPass — Privacy-Preserving Fund Risk Verification on NEAR</title>
     <meta name="description" content="Prove your money is clean, without showing anyone your history. Built on NEAR blockchain." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+      window.global = window.global || window;
+      window.process = window.process || { env: {} };
+    </script>
   </head>
-  <body>
+  <body style="background-color: #030712; color: #f8fafc; margin: 0; padding: 0; min-height: 100vh;">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

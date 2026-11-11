@@ -48,16 +48,17 @@ export const NearWalletProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
     async function initSelector() {
       try {
+        const modules: any[] = [setupMyNearWallet()];
+
+        try { modules.push(setupMeteorWallet()); } catch (e) { console.warn('[NearWallet] Meteor:', e); }
+        try { modules.push(setupHereWallet()); } catch (e) { console.warn('[NearWallet] Here:', e); }
+        try { modules.push(setupSender()); } catch (e) { console.warn('[NearWallet] Sender:', e); }
+        try { modules.push(setupNightly()); } catch (e) { console.warn('[NearWallet] Nightly:', e); }
+        try { modules.push(setupLedger()); } catch (e) { console.warn('[NearWallet] Ledger:', e); }
+
         const _selector = await setupWalletSelector({
           network: networkId,
-          modules: [
-            setupMyNearWallet(),
-            setupMeteorWallet(),
-            setupHereWallet(),
-            setupSender(),
-            setupNightly(),
-            setupLedger(),
-          ] as any[],
+          modules,
         });
 
         const _modal = setupModal(_selector, {
