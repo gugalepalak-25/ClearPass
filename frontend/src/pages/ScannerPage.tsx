@@ -22,11 +22,12 @@ import { TrustNotice } from '../components/TrustNotice.js';
 interface ScannerPageProps {
   onNavigate: (tab: string) => void;
   onCertificateIssued?: (cert: VerificationCertificate) => void;
+  initialAccount?: string;
 }
 
-export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertificateIssued }) => {
+export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertificateIssued, initialAccount }) => {
   const { accountId } = useNearWallet();
-  const [targetAccount, setTargetAccount] = useState<string>(accountId || 'alice-clean-demo.testnet');
+  const [targetAccount, setTargetAccount] = useState<string>(initialAccount || accountId || 'alice-clean-demo.testnet');
   const [hopDepth, setHopDepth] = useState<number>(2);
   const [selectedScenario, setSelectedScenario] = useState<string>('');
   const [includeAi, setIncludeAi] = useState<boolean>(true);
@@ -39,6 +40,12 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
 
   const [issuing, setIssuing] = useState<boolean>(false);
   const [issuedCert, setIssuedCert] = useState<VerificationCertificate | null>(null);
+
+  useEffect(() => {
+    if (initialAccount) {
+      setTargetAccount(initialAccount);
+    }
+  }, [initialAccount]);
 
   useEffect(() => {
     fetchScenarios()
