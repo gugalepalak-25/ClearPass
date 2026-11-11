@@ -76,9 +76,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={link.id}
                   onClick={() => onSelectTab(link.id)}
-                  className={`relative cursor-pointer transition-colors duration-300 ${
-                    isActive ? 'text-white font-semibold' : 'hover:text-white'
-                  }`}
+                  className={`relative cursor-pointer transition-colors duration-300 ${isActive ? 'text-white font-semibold' : 'hover:text-white'
+                    }`}
                 >
                   {link.label}
                   {isActive && (

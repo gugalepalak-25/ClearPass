@@ -28,6 +28,9 @@ export const VideoDemoModal: React.FC<VideoDemoModalProps> = ({
 
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = DEMO_VIDEO_STREAM;
+      video.addEventListener('loadedmetadata', () => {
+        video.play().catch(() => {});
+      });
     } else if (Hls.isSupported()) {
       hls = new Hls({
         enableWorker: false,
@@ -35,6 +38,9 @@ export const VideoDemoModal: React.FC<VideoDemoModalProps> = ({
       });
       hls.loadSource(DEMO_VIDEO_STREAM);
       hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {});
+      });
     } else {
       video.src = DEMO_VIDEO_STREAM;
     }
@@ -163,3 +169,4 @@ export const VideoDemoModal: React.FC<VideoDemoModalProps> = ({
     </AnimatePresence>
   );
 };
+
