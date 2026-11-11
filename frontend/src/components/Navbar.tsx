@@ -103,19 +103,19 @@ export const Navbar: React.FC<NavbarProps> = ({
           {!isConnected ? (
             <button
               onClick={() => connect()}
-              className="liquid-glass rounded-full px-6 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity cursor-pointer flex items-center gap-2"
+              className="rounded-full px-5 py-2 text-xs font-semibold text-slate-950 bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.45)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2 shadow-lg"
             >
-              <Wallet className="w-4 h-4" />
+              <Wallet className="w-4 h-4 stroke-[2.5]" />
               <span>Connect Wallet</span>
             </button>
           ) : (
             <div className="relative">
               <button
                 onClick={() => setShowWalletMenu(!showWalletMenu)}
-                className="liquid-glass rounded-full px-4 py-1.5 text-sm font-medium text-white hover:opacity-95 transition-opacity cursor-pointer flex items-center gap-2"
+                className="liquid-glass rounded-full px-4 py-1.5 text-sm font-medium text-white hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all cursor-pointer flex items-center gap-2"
               >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="font-mono text-xs max-w-[130px] truncate">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                <span className="font-mono text-xs max-w-[130px] truncate text-emerald-300">
                   {accountId}
                 </span>
                 <ChevronDown className="w-3.5 h-3.5 text-white/60" />

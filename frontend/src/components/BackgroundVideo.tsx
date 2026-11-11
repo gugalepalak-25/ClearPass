@@ -12,7 +12,6 @@ export const BackgroundVideo: React.FC = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Strict attributes and properties for cross-browser silent autoplay
     video.muted = true;
     video.defaultMuted = true;
     video.volume = 0;
@@ -32,9 +31,7 @@ export const BackgroundVideo: React.FC = () => {
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = VIDEO_SRC;
       video.addEventListener('loadedmetadata', () => {
-        video.play().catch((err) => {
-          console.warn('[ClearPass Video] Native autoplay deferred:', err);
-        });
+        video.play().catch(() => {});
       });
     } else if (Hls.isSupported()) {
       hls = new Hls({
@@ -44,31 +41,25 @@ export const BackgroundVideo: React.FC = () => {
         autoStartLoad: true,
       });
 
-      // Canonical HLS.js attachment lifecycle
       hls.attachMedia(video);
       hls.on(Hls.Events.MEDIA_ATTACHED, () => {
         hls?.loadSource(VIDEO_SRC);
       });
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch((err) => {
-          console.warn('[ClearPass Video] Autoplay deferred:', err);
-        });
+        video.play().catch(() => {});
       });
 
       hls.on(Hls.Events.ERROR, (_event, data) => {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              console.warn('[ClearPass Video] Network error encountered, recovering...');
               hls?.startLoad();
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
-              console.warn('[ClearPass Video] Media error encountered, recovering...');
               hls?.recoverMediaError();
               break;
             default:
-              console.error('[ClearPass Video] Fatal HLS error:', data);
               hls?.destroy();
               break;
           }
@@ -83,7 +74,6 @@ export const BackgroundVideo: React.FC = () => {
       playPromise.catch(() => {});
     }
 
-    // Interaction fallback
     const tryPlay = () => {
       if (video && video.paused) {
         video.play().then(() => setIsVideoLoaded(true)).catch(() => {});
@@ -91,13 +81,11 @@ export const BackgroundVideo: React.FC = () => {
     };
     window.addEventListener('click', tryPlay, { once: true });
     window.addEventListener('touchstart', tryPlay, { once: true });
-    window.addEventListener('scroll', tryPlay, { once: true });
 
     return () => {
       video.removeEventListener('playing', onPlaying);
       window.removeEventListener('click', tryPlay);
       window.removeEventListener('touchstart', tryPlay);
-      window.removeEventListener('scroll', tryPlay);
       if (hls) {
         hls.destroy();
       }
@@ -106,11 +94,27 @@ export const BackgroundVideo: React.FC = () => {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      {/* Ambient background glow ensuring rich visuals even while video stream buffers */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#08120c] via-black to-[#050b07] -z-20" />
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] md:w-[1000px] h-[500px] bg-gradient-to-tr from-emerald-500/10 via-white/[0.03] to-transparent rounded-full blur-[140px] -z-10 pointer-events-none" />
+      {/* Deep Obsidian Space Backdrop */}
+      <div className="absolute inset-0 bg-[#030712] -z-30" />
 
-      {/* Fullscreen Background Video */}
+      {/* Cyber Grid Overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.14] -z-25"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          maskImage: 'radial-gradient(ellipse 80% 60% at 50% 30%, #000 60%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 30%, #000 60%, transparent 100%)',
+        }}
+      />
+
+      {/* Radiant Aurora Mesh Glows */}
+      <div className="absolute top-[-10%] left-[-5%] w-[650px] h-[550px] bg-gradient-to-br from-emerald-500/25 via-teal-500/15 to-transparent rounded-full blur-[140px] animate-pulse duration-7000 -z-20" />
+      <div className="absolute top-[20%] right-[-10%] w-[700px] h-[600px] bg-gradient-to-bl from-cyan-500/20 via-blue-600/15 to-transparent rounded-full blur-[150px] -z-20" />
+      <div className="absolute bottom-[-15%] left-[25%] w-[600px] h-[500px] bg-gradient-to-t from-violet-600/20 via-indigo-500/10 to-transparent rounded-full blur-[160px] -z-20" />
+
+      {/* Mux HLS Background Video with Holographic blend */}
       <video
         ref={videoRef}
         autoPlay
@@ -118,14 +122,16 @@ export const BackgroundVideo: React.FC = () => {
         loop
         playsInline
         poster={POSTER_SRC}
-        className="w-full h-full object-cover opacity-100"
+        className="w-full h-full object-cover opacity-80 mix-blend-screen -z-15"
         style={{
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          opacity: 1,
         }}
       />
+
+      {/* Subtle top & bottom vignette to frame the content */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#030712]/70 via-transparent to-[#030712]/90 pointer-events-none -z-10" />
     </div>
   );
 };

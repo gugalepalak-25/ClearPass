@@ -123,10 +123,10 @@ export const Hero: React.FC<HeroProps> = ({
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ duration: 0.2 }}
                 onClick={() => setFormOpen(true)}
-                className="px-10 py-3 text-[14px] font-medium border border-white/10 rounded-full hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 text-white/90 backdrop-blur-sm cursor-pointer shadow-lg shadow-black/40 flex items-center gap-2 group"
+                className="px-10 py-3 text-[14px] font-semibold border border-emerald-500/30 rounded-full bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-emerald-500/10 hover:border-emerald-400 hover:shadow-[0_0_24px_rgba(16,185,129,0.3)] transition-all duration-300 text-white backdrop-blur-md cursor-pointer flex items-center gap-2 group"
               >
                 <span>Get early access & scan wallet</span>
-                <ArrowRight className="w-4 h-4 text-white/60 group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
               </motion.button>
             ) : (
               <motion.form
@@ -136,7 +136,7 @@ export const Hero: React.FC<HeroProps> = ({
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ duration: 0.2 }}
                 onSubmit={handleSubmit}
-                className="flex items-center gap-2 pl-5 pr-1.5 py-1.5 text-[14px] font-medium border border-white/20 rounded-full bg-white/[0.03] backdrop-blur-md w-full max-w-[360px] focus-within:border-white/50 transition-colors duration-300 shadow-2xl"
+                className="flex items-center gap-2 pl-5 pr-1.5 py-1.5 text-[14px] font-medium border border-emerald-500/40 rounded-full bg-slate-900/90 backdrop-blur-xl w-full max-w-[380px] shadow-[0_0_25px_rgba(16,185,129,0.2)] focus-within:border-emerald-400 focus-within:shadow-[0_0_30px_rgba(16,185,129,0.35)] transition-all duration-300"
               >
                 <input
                   type="text"
@@ -145,18 +145,18 @@ export const Hero: React.FC<HeroProps> = ({
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder={placeholderText}
                   disabled={isSubmitted}
-                  className="bg-transparent text-white placeholder-white/45 text-[13px] md:text-[14px] outline-none flex-1 min-w-0"
+                  className="bg-transparent text-white placeholder-slate-400 text-[13px] md:text-[14px] outline-none flex-1 min-w-0 font-mono"
                 />
                 <button
                   type="submit"
                   disabled={isSubmitted || !inputValue.trim()}
-                  className="liquid-glass rounded-full w-8 h-8 flex items-center justify-center text-white hover:opacity-90 disabled:opacity-40 transition-opacity cursor-pointer shrink-0"
+                  className="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 flex items-center justify-center text-slate-950 font-bold hover:scale-105 disabled:opacity-40 transition-transform cursor-pointer shrink-0"
                   aria-label="Submit"
                 >
                   {isSubmitted ? (
-                    <Check className="w-4 h-4 text-emerald-400" />
+                    <Check className="w-4 h-4 text-slate-950 stroke-[3]" />
                   ) : (
-                    <ArrowRight className="w-4 h-4 text-white" />
+                    <ArrowRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
                   )}
                 </button>
               </motion.form>
