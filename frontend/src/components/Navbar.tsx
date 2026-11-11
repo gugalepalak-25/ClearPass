@@ -159,6 +159,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                     {/* Quick Demo Accounts */}
                     <div className="p-2 border-b border-white/10 mb-2">
+                      <button
+                        onClick={() => {
+                          setShowWalletMenu(false);
+                          connect();
+                        }}
+                        className="w-full flex items-center gap-2 px-2 py-1.5 rounded bg-white/10 hover:bg-white/15 text-white text-[11px] font-medium transition-colors mb-2"
+                      >
+                        <Wallet className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Connect Another Wallet / Address</span>
+                      </button>
+
                       <div className="text-white/50 text-[10px] uppercase tracking-wider mb-1.5 flex items-center gap-1">
                         <Sparkles className="w-3 h-3 text-emerald-400" />
                         <span>Demo Test Profiles</span>
