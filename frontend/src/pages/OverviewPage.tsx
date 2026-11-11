@@ -10,6 +10,7 @@ import {
   HelpCircle,
   ArrowRight,
   ExternalLink,
+  Sparkles,
 } from 'lucide-react';
 import { StatCard } from '../components/StatCard.js';
 import { TrustNotice } from '../components/TrustNotice.js';
@@ -49,44 +50,38 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
   const latestCert = certificates[0];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div className="flex flex-col gap-6 w-full">
       {/* Top Banner / Hero */}
-      <div
-        className="glass-card"
-        style={{
-          background: 'linear-gradient(135deg, rgba(12, 31, 23, 0.9) 0%, rgba(7, 22, 17, 0.95) 100%)',
-          border: '1px solid var(--border-medium)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        <div style={{ maxWidth: '780px', position: 'relative', zIndex: 1 }}>
-          <div className="badge badge-approved" style={{ marginBottom: '12px' }}>
-            Privacy-Preserving Fund Risk Protocol
+      <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-[400px] h-[300px] bg-gradient-to-bl from-emerald-500/15 via-cyan-500/10 to-transparent rounded-full blur-[100px] pointer-events-none -z-10 group-hover:opacity-100 transition-opacity" />
+
+        <div className="max-w-3xl relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Privacy-Preserving Fund Risk Protocol</span>
           </div>
+
           <h1
-            style={{
-              fontSize: '2rem',
-              fontWeight: 800,
-              color: '#f0fdf4',
-              letterSpacing: '-0.03em',
-              marginBottom: '10px',
-            }}
+            style={{ fontFamily: "'Instrument Serif', serif" }}
+            className="text-3xl md:text-5xl font-normal text-white tracking-tight leading-tight mb-3"
           >
-            Prove your funds are clean, <br />
-            <span style={{ color: '#34d399' }}>without revealing your transaction history.</span>
+            Prove your funds are clean,{' '}
+            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              without revealing your history.
+            </span>
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '20px' }}>
+
+          <p className="text-slate-300 text-sm md:text-base leading-relaxed mb-6 font-light">
             ClearPass performs deterministic fund-risk assessments on the NEAR blockchain. Generate verifiable,
             tamper-proof cryptographic certificates that DeFi applications and exchanges can trust—while keeping your
             financial privacy intact.
           </p>
 
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <button onClick={() => onNavigate('scanner')} className="btn btn-primary">
+          <div className="flex items-center gap-3 flex-wrap">
+            <button onClick={() => onNavigate('scanner')} className="btn btn-primary text-xs md:text-sm">
               <Search size={16} /> Start Risk Scanner
             </button>
-            <button onClick={() => onNavigate('certificates')} className="btn btn-secondary">
+            <button onClick={() => onNavigate('certificates')} className="btn btn-secondary text-xs md:text-sm">
               <Award size={16} /> View Certificates ({totalCerts})
             </button>
           </div>
@@ -134,130 +129,106 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
       {/* Connected Wallet & Latest Assessment Card */}
       <div className="grid-2">
         {/* Wallet Status Card */}
-        <div className="glass-card">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f0fdf4' }}>Connected NEAR Wallet</h3>
-            <span className="badge badge-neutral">NEAR Testnet</span>
-          </div>
+        <div className="glass-card flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-semibold text-white">Connected NEAR Wallet</h3>
+              <span className="badge badge-neutral text-[10px]">NEAR Testnet</span>
+            </div>
 
-          {isConnected && accountId ? (
-            <div>
-              <div
-                style={{
-                  padding: '14px',
-                  background: 'var(--bg-secondary)',
-                  borderRadius: '10px',
-                  border: '1px solid var(--border-medium)',
-                  marginBottom: '16px',
-                }}
-              >
-                <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '2px' }}>Account ID</div>
-                <div style={{ fontSize: '1rem', fontWeight: 600, color: '#34d399', wordBreak: 'break-all' }}>
-                  {accountId}
+            {isConnected && accountId ? (
+              <div>
+                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 mb-4">
+                  <div className="text-[11px] text-slate-400 uppercase tracking-wider mb-1">Active Account ID</div>
+                  <div className="text-sm md:text-base font-mono font-semibold text-emerald-400 break-all">
+                    {accountId}
+                  </div>
                 </div>
-              </div>
 
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button onClick={() => onNavigate('scanner')} className="btn btn-primary" style={{ flex: 1 }}>
-                  <Search size={16} /> Scan This Wallet
+                <button onClick={() => onNavigate('scanner')} className="btn btn-primary w-full text-xs">
+                  <Search size={15} /> Scan This Wallet
                 </button>
               </div>
-            </div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '24px 12px' }}>
-              <div
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '50%',
-                  background: 'rgba(148, 163, 184, 0.1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 12px',
-                  color: '#94a3b8',
-                }}
-              >
-                <HelpCircle size={22} />
+            ) : (
+              <div className="text-center py-6 px-4">
+                <div className="w-12 h-12 rounded-full bg-white/[0.04] border border-white/10 flex items-center justify-center mx-auto mb-3 text-slate-400">
+                  <HelpCircle size={22} />
+                </div>
+                <p className="text-slate-400 text-xs md:text-sm mb-4 leading-relaxed">
+                  Connect a NEAR Testnet wallet or choose an instant synthetic demo account.
+                </p>
+                <button onClick={() => connect()} className="btn btn-primary text-xs">
+                  Connect Wallet
+                </button>
               </div>
-              <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '16px' }}>
-                Connect a NEAR Testnet wallet or choose an instant synthetic demo account.
-              </p>
-              <button onClick={() => connect()} className="btn btn-primary">
-                Connect Wallet
-              </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Latest Certificate Status */}
-        <div className="glass-card">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f0fdf4' }}>Latest Certificate</h3>
-            {latestCert && (
-              <span
-                className={`badge ${
-                  latestCert.outcome === 'APPROVED'
-                    ? 'badge-approved'
-                    : latestCert.outcome === 'REJECTED'
-                    ? 'badge-rejected'
-                    : 'badge-inconclusive'
-                }`}
-              >
-                {latestCert.outcome}
-              </span>
+        <div className="glass-card flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-semibold text-white">Latest Certificate</h3>
+              {latestCert && (
+                <span
+                  className={`badge ${
+                    latestCert.outcome === 'APPROVED'
+                      ? 'badge-approved'
+                      : latestCert.outcome === 'REJECTED'
+                      ? 'badge-rejected'
+                      : 'badge-inconclusive'
+                  } text-[10px]`}
+                >
+                  {latestCert.outcome}
+                </span>
+              )}
+            </div>
+
+            {latestCert ? (
+              <div>
+                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 mb-4 space-y-2 text-xs">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-400">Certificate ID</span>
+                    <span className="text-white font-mono">{latestCert.certificateId.slice(0, 16)}...</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-400">Risk Score</span>
+                    <span
+                      className={`font-mono font-bold ${
+                        latestCert.riskScore < 25 ? 'text-emerald-400' : 'text-rose-400'
+                      }`}
+                    >
+                      {latestCert.riskScore}/100
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-400">Expires</span>
+                    <span className="text-slate-300">
+                      {new Date(latestCert.expiryTimestamp).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => onNavigate('certificates')}
+                  className="btn btn-secondary w-full text-xs flex items-center justify-center gap-1.5"
+                >
+                  <span>View Certificate Details</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+            ) : (
+              <div className="text-center py-6 px-4">
+                <p className="text-slate-400 text-xs md:text-sm mb-4">
+                  No certificates have been issued yet in this session.
+                </p>
+                <button onClick={() => onNavigate('scanner')} className="btn btn-secondary btn-sm text-xs">
+                  Run First Assessment
+                </button>
+              </div>
             )}
           </div>
-
-          {latestCert ? (
-            <div>
-              <div
-                style={{
-                  padding: '14px',
-                  background: 'var(--bg-secondary)',
-                  borderRadius: '10px',
-                  border: '1px solid var(--border-medium)',
-                  marginBottom: '16px',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Certificate ID</span>
-                  <span style={{ fontSize: '0.8rem', color: '#f0fdf4', fontFamily: 'var(--font-mono)' }}>
-                    {latestCert.certificateId.slice(0, 16)}...
-                  </span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Risk Score</span>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: latestCert.riskScore < 25 ? '#34d399' : '#f87171' }}>
-                    {latestCert.riskScore}/100
-                  </span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Expires</span>
-                  <span style={{ fontSize: '0.8rem', color: '#cbd5e1' }}>
-                    {new Date(latestCert.expiryTimestamp).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={() => onNavigate('certificates')}
-                className="btn btn-secondary"
-                style={{ width: '100%' }}
-              >
-                View Certificate Details <ArrowRight size={14} />
-              </button>
-            </div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '24px 12px' }}>
-              <p style={{ color: '#64748b', fontSize: '0.88rem', marginBottom: '14px' }}>
-                No certificates have been issued yet in this session.
-              </p>
-              <button onClick={() => onNavigate('scanner')} className="btn btn-secondary btn-sm">
-                Run First Assessment
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
@@ -265,48 +236,39 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
       <div className="grid-3">
         <div
           onClick={() => onNavigate('scanner')}
-          className="glass-card"
-          style={{ cursor: 'pointer' }}
+          className="glass-card cursor-pointer group hover:border-emerald-500/40 transition-all"
         >
-          <div style={{ color: '#34d399', marginBottom: '8px' }}>
-            <Search size={22} />
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <Search size={20} />
           </div>
-          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f0fdf4', marginBottom: '4px' }}>
-            Risk Scanner
-          </h4>
-          <p style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: 1.4 }}>
+          <h4 className="text-sm font-semibold text-white mb-1.5">Risk Scanner</h4>
+          <p className="text-xs text-slate-400 leading-relaxed">
             Scan native NEAR and NEP-141 transfers up to 3 hops against synthetic flagged entities.
           </p>
         </div>
 
         <div
           onClick={() => onNavigate('auditor')}
-          className="glass-card"
-          style={{ cursor: 'pointer' }}
+          className="glass-card cursor-pointer group hover:border-cyan-500/40 transition-all"
         >
-          <div style={{ color: '#34d399', marginBottom: '8px' }}>
-            <Users size={22} />
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <Users size={20} />
           </div>
-          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f0fdf4', marginBottom: '4px' }}>
-            Auditor Portal
-          </h4>
-          <p style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: 1.4 }}>
+          <h4 className="text-sm font-semibold text-white mb-1.5">Auditor Portal</h4>
+          <p className="text-xs text-slate-400 leading-relaxed">
             Share restricted, encrypted reports with compliance auditors without leaking transaction history.
           </p>
         </div>
 
         <div
           onClick={() => onNavigate('settings')}
-          className="glass-card"
-          style={{ cursor: 'pointer' }}
+          className="glass-card cursor-pointer group hover:border-violet-500/40 transition-all"
         >
-          <div style={{ color: '#34d399', marginBottom: '8px' }}>
-            <ShieldCheck size={22} />
+          <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <ShieldCheck size={20} />
           </div>
-          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f0fdf4', marginBottom: '4px' }}>
-            Protocol & Risk List
-          </h4>
-          <p style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: 1.4 }}>
+          <h4 className="text-sm font-semibold text-white mb-1.5">Protocol & Risk List</h4>
+          <p className="text-xs text-slate-400 leading-relaxed">
             Inspect smart contract state, authorized issuers, and demo flagged dataset.
           </p>
         </div>
@@ -314,53 +276,37 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
 
       {/* Recent Activity Feed */}
       <div className="glass-card">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <ActivityIcon size={18} color="#34d399" />
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f0fdf4' }}>Recent Protocol Activity</h3>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <h3 className="text-sm md:text-base font-semibold text-white">Recent Protocol Activity</h3>
           </div>
-          <button onClick={() => onNavigate('activity')} className="btn btn-secondary btn-sm">
+          <button onClick={() => onNavigate('activity')} className="btn btn-secondary btn-sm text-xs">
             View All Activity
           </button>
         </div>
 
         {activities.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div className="flex flex-col gap-2">
             {activities.slice(0, 5).map((act) => (
               <div
                 key={act.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '10px 14px',
-                  background: 'var(--bg-secondary)',
-                  borderRadius: '8px',
-                  border: '1px solid var(--border-subtle)',
-                  fontSize: '0.85rem',
-                }}
+                className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/5 transition-all text-xs"
               >
                 <div>
-                  <div style={{ fontWeight: 600, color: '#f0fdf4', marginBottom: '2px' }}>
-                    {act.details}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                    Target: {act.walletAddress}
-                  </div>
+                  <div className="font-medium text-white mb-0.5">{act.details}</div>
+                  <div className="text-[11px] text-slate-500 font-mono">Target: {act.walletAddress}</div>
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', whiteSpace: 'nowrap' }}>
+                <div className="text-[11px] text-slate-400 font-mono">
                   {new Date(act.timestamp).toLocaleTimeString()}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div style={{ color: '#64748b', fontSize: '0.85rem', textAlign: 'center', padding: '16px' }}>
-            No recent protocol activity recorded.
-          </div>
+          <div className="text-slate-500 text-xs text-center py-4">No recent protocol activity recorded.</div>
         )}
       </div>
     </div>
   );
 };
-

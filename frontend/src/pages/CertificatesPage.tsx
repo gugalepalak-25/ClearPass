@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import {
   Award,
-  ShieldCheck,
+  CheckCircle2,
   AlertOctagon,
   HelpCircle,
-  CheckCircle2,
-  XCircle,
   Copy,
   Check,
-  ExternalLink,
-  Users,
+  ShieldCheck,
   Download,
-  Search,
-  Filter,
+  Share2,
   RefreshCw,
+  ExternalLink,
+  Search,
+  Key,
+  X,
+  FileText,
 } from 'lucide-react';
-import { VerificationCertificate } from '../types/index.js';
 import {
   fetchCertificates,
   verifyCertificateOnServer,
   revokeCertificateOnServer,
 } from '../services/api.js';
+import { VerificationCertificate } from '../types/index.js';
 
 interface CertificatesPageProps {
   onNavigate: (tab: string) => void;
@@ -36,14 +37,13 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
   const [filter, setFilter] = useState<string>('ALL');
   const [selectedCert, setSelectedCert] = useState<VerificationCertificate | null>(null);
 
-  const [verifying, setVerifying] = useState<boolean>(false);
+  const [verifying, setVerifying] = useState(false);
   const [verificationResult, setVerificationResult] = useState<any | null>(null);
 
-  const [revoking, setRevoking] = useState<boolean>(false);
-  const [revokeReason, setRevokeReason] = useState<string>('');
-  const [showRevokeModal, setShowRevokeModal] = useState<boolean>(false);
-
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [showRevokeModal, setShowRevokeModal] = useState(false);
+  const [revokeReason, setRevokeReason] = useState('');
+  const [revoking, setRevoking] = useState(false);
 
   useEffect(() => {
     loadCertificates();
@@ -127,29 +127,29 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div className="flex flex-col gap-6 w-full">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f0fdf4', marginBottom: '4px' }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight mb-1">
             Verification Certificate Registry
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+          <p className="text-slate-400 text-xs md:text-sm">
             Cryptographically signed and on-chain verifiable proof records.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={() => loadCertificates()} className="btn btn-secondary btn-sm">
-            <RefreshCw size={14} /> Refresh
+        <div className="flex items-center gap-2.5">
+          <button onClick={() => loadCertificates()} className="btn btn-secondary btn-sm text-xs">
+            <RefreshCw size={13} /> <span>Refresh</span>
           </button>
-          <button onClick={() => onNavigate('scanner')} className="btn btn-primary btn-sm">
-            <Search size={14} /> Scan New Wallet
+          <button onClick={() => onNavigate('scanner')} className="btn btn-primary btn-sm text-xs">
+            <Search size={13} /> <span>Scan New Wallet</span>
           </button>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+      <div className="flex gap-2 overflow-x-auto pb-1">
         {[
           { id: 'ALL', label: `All (${certificates.length})` },
           { id: 'APPROVED', label: 'Approved' },
@@ -160,16 +160,11 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
           <button
             key={tab.id}
             onClick={() => setFilter(tab.id)}
-            style={{
-              padding: '6px 14px',
-              borderRadius: '20px',
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              background: filter === tab.id ? 'var(--border-medium)' : 'var(--bg-card)',
-              color: filter === tab.id ? '#34d399' : '#94a3b8',
-              border: filter === tab.id ? '1px solid var(--accent-emerald)' : '1px solid var(--border-subtle)',
-              cursor: 'pointer',
-            }}
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+              filter === tab.id
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/60 shadow-[0_0_12px_rgba(16,185,129,0.25)]'
+                : 'bg-white/[0.03] text-slate-400 border border-white/10 hover:bg-white/[0.06] hover:text-white'
+            }`}
           >
             {tab.label}
           </button>
@@ -177,17 +172,16 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
       </div>
 
       {/* Main Layout: List & Selected Certificate Details */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '20px' }}>
-        {/* Certificate List */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '720px', overflowY: 'auto' }}>
-          <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#cbd5e1' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Certificate List (1 col) */}
+        <div className="liquid-glass rounded-3xl p-5 border border-white/10 shadow-2xl flex flex-col gap-3 max-h-[720px] overflow-y-auto">
+          <h3 className="text-xs uppercase tracking-wider font-semibold text-slate-400 mb-1">
             Certificates ({filtered.length})
           </h3>
 
           {filtered.length > 0 ? (
             filtered.map((cert) => {
               const isSelected = selectedCert?.certificateId === cert.certificateId;
-              const isExpired = new Date(cert.expiryTimestamp) < new Date();
               return (
                 <div
                   key={cert.certificateId}
@@ -195,19 +189,13 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
                     setSelectedCert(cert);
                     setVerificationResult(null);
                   }}
-                  style={{
-                    padding: '12px',
-                    borderRadius: '8px',
-                    background: isSelected ? 'rgba(16, 185, 129, 0.12)' : 'var(--bg-secondary)',
-                    border: isSelected ? '1px solid #10b981' : '1px solid var(--border-subtle)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '6px',
-                    transition: 'all 0.15s ease',
-                  }}
+                  className={`p-3.5 rounded-2xl cursor-pointer flex flex-col gap-1.5 transition-all ${
+                    isSelected
+                      ? 'bg-emerald-500/15 border border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
+                      : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/10'
+                  }`}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div className="flex items-center justify-between">
                     <span
                       className={`badge ${
                         cert.revoked
@@ -217,72 +205,60 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
                           : cert.outcome === 'REJECTED'
                           ? 'badge-rejected'
                           : 'badge-inconclusive'
-                      }`}
-                      style={{ fontSize: '0.65rem' }}
+                      } text-[10px]`}
                     >
                       {cert.revoked ? 'REVOKED' : cert.outcome}
                     </span>
-                    <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                    <span className="text-[11px] text-slate-500 font-mono">
                       {new Date(cert.assessmentTimestamp).toLocaleDateString()}
                     </span>
                   </div>
 
-                  <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#f0fdf4' }}>
+                  <div className="font-semibold text-xs md:text-sm text-white font-mono truncate">
                     {cert.walletAddress}
                   </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8' }}>
-                    <span>Score: {cert.riskScore}/100</span>
+                  <div className="flex justify-between items-center text-[11px] text-slate-400 font-mono">
+                    <span>Score: <strong className={cert.riskScore < 25 ? 'text-emerald-400' : 'text-rose-400'}>{cert.riskScore}/100</strong></span>
                     <span>{cert.hopDepth} Hops</span>
                   </div>
                 </div>
               );
             })
           ) : (
-            <div style={{ textAlign: 'center', padding: '32px 12px', color: '#64748b', fontSize: '0.85rem' }}>
+            <div className="text-center py-8 text-slate-500 text-xs">
               No certificates found matching this filter.
             </div>
           )}
         </div>
 
-        {/* Selected Certificate Detail View */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        {/* Selected Certificate Detail View (2 cols) */}
+        <div className="lg:col-span-2 liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl flex flex-col gap-6">
           {selectedCert ? (
             <>
               {/* Header */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  flexWrap: 'wrap',
-                  gap: '12px',
-                  paddingBottom: '16px',
-                  borderBottom: '1px solid var(--border-subtle)',
-                }}
-              >
+              <div className="flex items-center justify-between flex-wrap gap-4 pb-5 border-b border-white/10">
                 <div>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '2px' }}>
-                    Verification Certificate
-                  </div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#f0fdf4' }}>
+                  <div className="text-xs text-slate-400 mb-0.5">Verification Certificate Record</div>
+                  <div className="text-base md:text-lg font-bold font-mono text-white break-all">
                     {selectedCert.certificateId}
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="flex items-center gap-2 flex-wrap">
                   <button
                     onClick={() => handleVerify(selectedCert.certificateId)}
                     disabled={verifying}
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-primary text-xs py-2 px-4"
                   >
-                    <ShieldCheck size={14} /> {verifying ? 'Verifying...' : 'Verify Cryptographic Proof'}
+                    <ShieldCheck size={14} />
+                    <span>{verifying ? 'Verifying...' : 'Verify Cryptographic Proof'}</span>
                   </button>
 
                   <button
                     onClick={() => handleExportJson(selectedCert)}
-                    className="btn btn-secondary btn-sm"
-                    title="Export raw JSON"
+                    className="btn btn-secondary text-xs py-2 px-3"
+                    title="Export JSON"
                   >
                     <Download size={14} />
                   </button>
@@ -290,7 +266,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
                   {!selectedCert.revoked && (
                     <button
                       onClick={() => setShowRevokeModal(true)}
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-danger text-xs py-2 px-3"
                     >
                       Revoke
                     </button>
@@ -301,200 +277,114 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
               {/* Verification Live Status Banner */}
               {verificationResult && (
                 <div
-                  style={{
-                    padding: '14px',
-                    borderRadius: '8px',
-                    background: verificationResult.isValid
-                      ? 'rgba(16, 185, 129, 0.1)'
-                      : 'rgba(239, 68, 68, 0.1)',
-                    border: verificationResult.isValid
-                      ? '1px solid rgba(16, 185, 129, 0.3)'
-                      : '1px solid rgba(239, 68, 68, 0.3)',
-                    color: verificationResult.isValid ? '#34d399' : '#f87171',
-                    fontSize: '0.88rem',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '10px',
-                  }}
+                  className={`p-4 rounded-2xl flex items-start gap-3 text-xs md:text-sm ${
+                    verificationResult.isValid
+                      ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
+                      : 'bg-rose-500/10 border border-rose-500/30 text-rose-300'
+                  }`}
                 >
-                  <div style={{ marginTop: '2px' }}>
-                    {verificationResult.isValid ? <CheckCircle2 size={18} /> : <XCircle size={18} />}
+                  <div className="mt-0.5">
+                    {verificationResult.isValid ? (
+                      <CheckCircle2 size={18} className="text-emerald-400" />
+                    ) : (
+                      <AlertOctagon size={18} className="text-rose-400" />
+                    )}
                   </div>
                   <div>
-                    <div style={{ fontWeight: 700, marginBottom: '2px' }}>
-                      Status: {verificationResult.status} (Valid:{' '}
-                      {verificationResult.isValid ? 'YES' : 'NO'})
-                    </div>
-                    <div>{verificationResult.reason}</div>
+                    <strong className="block font-semibold mb-0.5">
+                      {verificationResult.isValid ? 'Cryptographic Proof Valid' : 'Verification Unsuccessful'}
+                    </strong>
+                    <span className="text-slate-300 text-xs">
+                      {verificationResult.reason || 'Ed25519 signature and on-chain record match verified issuer.'}
+                    </span>
                   </div>
                 </div>
               )}
 
-              {/* Metadata Key-Value Grid */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '14px',
-                  background: 'var(--bg-secondary)',
-                  padding: '16px',
-                  borderRadius: '10px',
-                  border: '1px solid var(--border-medium)',
-                  fontSize: '0.85rem',
-                }}
-              >
-                <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '2px' }}>Subject Account</span>
-                  <span style={{ fontWeight: 600, color: '#f0fdf4' }}>{selectedCert.walletAddress}</span>
+              {/* Certificate Key-Value Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 text-xs">
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10">
+                  <span className="text-slate-400 block mb-1">Evaluated Account</span>
+                  <span className="text-white font-mono font-semibold break-all">{selectedCert.walletAddress}</span>
                 </div>
 
-                <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '2px' }}>Outcome</span>
-                  <span
-                    className={`badge ${
-                      selectedCert.revoked
-                        ? 'badge-rejected'
-                        : selectedCert.outcome === 'APPROVED'
-                        ? 'badge-approved'
-                        : selectedCert.outcome === 'REJECTED'
-                        ? 'badge-rejected'
-                        : 'badge-inconclusive'
-                    }`}
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10">
+                  <span className="text-slate-400 block mb-1">Assessment Date</span>
+                  <span className="text-white font-mono">{new Date(selectedCert.assessmentTimestamp).toLocaleString()}</span>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10">
+                  <span className="text-slate-400 block mb-1">Expiry Date</span>
+                  <span className="text-white font-mono">{new Date(selectedCert.expiryTimestamp).toLocaleDateString()}</span>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10">
+                  <span className="text-slate-400 block mb-1">Risk Score</span>
+                  <span className={`text-base font-bold font-mono ${selectedCert.riskScore < 25 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {selectedCert.riskScore}/100
+                  </span>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10">
+                  <span className="text-slate-400 block mb-1">Traversal Scope</span>
+                  <span className="text-white font-mono">{selectedCert.hopDepth} Max Hops</span>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10">
+                  <span className="text-slate-400 block mb-1">On-Chain Anchor</span>
+                  <span className="text-emerald-400 font-mono font-semibold">
+                    {selectedCert.onChainTxHash ? 'Stored on NEAR' : 'Ready to Anchor'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Cryptographic Proof Details */}
+              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col gap-3">
+                <div className="flex items-center gap-2 text-xs font-semibold text-white">
+                  <Key size={14} className="text-emerald-400" />
+                  <span>Ed25519 Cryptographic Proof Details</span>
+                </div>
+
+                <div className="space-y-2 text-xs font-mono">
+                  <div className="flex justify-between items-center p-2 rounded-xl bg-black/40">
+                    <span className="text-slate-400 text-[11px]">Issuer Public Key:</span>
+                    <span className="text-emerald-300 text-[11px] truncate max-w-[280px]">
+                      {selectedCert.issuerPublicKey}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center p-2 rounded-xl bg-black/40">
+                    <span className="text-slate-400 text-[11px]">Digital Signature:</span>
+                    <span className="text-slate-300 text-[11px] truncate max-w-[280px]">
+                      {selectedCert.digitalSignature}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center p-2 rounded-xl bg-black/40">
+                    <span className="text-slate-400 text-[11px]">Certificate Hash:</span>
+                    <span className="text-slate-300 text-[11px] truncate max-w-[280px]">
+                      {selectedCert.certHash}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Selective Disclosure Action */}
+              <div className="pt-2 flex items-center justify-between">
+                {onSelectShareCertificate && (
+                  <button
+                    onClick={() => onSelectShareCertificate(selectedCert.certificateId)}
+                    className="btn btn-primary text-xs py-2 px-5"
                   >
-                    {selectedCert.revoked ? 'REVOKED' : selectedCert.outcome}
-                  </span>
-                </div>
-
-                <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '2px' }}>Risk Score</span>
-                  <span style={{ fontWeight: 700, color: selectedCert.riskScore < 25 ? '#34d399' : '#f87171' }}>
-                    {selectedCert.riskScore} / 100
-                  </span>
-                </div>
-
-                <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '2px' }}>Assessment Hop Depth</span>
-                  <span style={{ color: '#f0fdf4' }}>{selectedCert.hopDepth} Hops</span>
-                </div>
-
-                <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '2px' }}>Issued Timestamp</span>
-                  <span style={{ color: '#cbd5e1' }}>
-                    {new Date(selectedCert.assessmentTimestamp).toLocaleString()}
-                  </span>
-                </div>
-
-                <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '2px' }}>Expiration</span>
-                  <span style={{ color: '#cbd5e1' }}>
-                    {new Date(selectedCert.expiryTimestamp).toLocaleString()}
-                  </span>
-                </div>
-
-                <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '2px' }}>Risk List Version</span>
-                  <span style={{ color: '#cbd5e1' }}>{selectedCert.riskListVersion}</span>
-                </div>
-
-                <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '2px' }}>Network</span>
-                  <span style={{ color: '#34d399', fontWeight: 600 }}>{selectedCert.network}</span>
-                </div>
-              </div>
-
-              {/* Cryptographic Signature & Hash Block */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#cbd5e1' }}>
-                  Cryptographic Integrity & Digital Signature
-                </h4>
-
-                {/* SHA-256 Hash */}
-                <div
-                  style={{
-                    padding: '10px 12px',
-                    borderRadius: '8px',
-                    background: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-subtle)',
-                    fontSize: '0.78rem',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', color: '#64748b' }}>
-                    <span>Canonical SHA-256 Hash</span>
-                    <button
-                      onClick={() => handleCopy(selectedCert.certHash, 'hash')}
-                      style={{ background: 'transparent', color: '#94a3b8' }}
-                    >
-                      {copiedField === 'hash' ? <Check size={12} color="#10b981" /> : <Copy size={12} />}
-                    </button>
-                  </div>
-                  <div style={{ fontFamily: 'var(--font-mono)', color: '#34d399', wordBreak: 'break-all' }}>
-                    {selectedCert.certHash}
-                  </div>
-                </div>
-
-                {/* Ed25519 Signature */}
-                <div
-                  style={{
-                    padding: '10px 12px',
-                    borderRadius: '8px',
-                    background: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-subtle)',
-                    fontSize: '0.78rem',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', color: '#64748b' }}>
-                    <span>Ed25519 Issuer Signature</span>
-                    <button
-                      onClick={() => handleCopy(selectedCert.digitalSignature, 'sig')}
-                      style={{ background: 'transparent', color: '#94a3b8' }}
-                    >
-                      {copiedField === 'sig' ? <Check size={12} color="#10b981" /> : <Copy size={12} />}
-                    </button>
-                  </div>
-                  <div style={{ fontFamily: 'var(--font-mono)', color: '#cbd5e1', wordBreak: 'break-all' }}>
-                    {selectedCert.digitalSignature}
-                  </div>
-                </div>
-
-                {/* Attestation Reference Note */}
-                <div
-                  style={{
-                    padding: '10px 12px',
-                    borderRadius: '8px',
-                    background: 'rgba(16, 185, 129, 0.05)',
-                    border: '1px solid rgba(16, 185, 129, 0.2)',
-                    fontSize: '0.75rem',
-                    color: '#94a3b8',
-                    lineHeight: 1.45,
-                  }}
-                >
-                  <strong style={{ color: '#f0fdf4', display: 'block', marginBottom: '2px' }}>
-                    Attestation Scope Notice
-                  </strong>
-                  {selectedCert.attestationReference?.note ||
-                    'Cryptographically signed by authorized issuer key. Standard digital signature verification.'}
-                </div>
-              </div>
-
-              {/* Share With Auditor Action */}
-              <div style={{ paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
-                <button
-                  onClick={() => {
-                    if (onSelectShareCertificate) {
-                      onSelectShareCertificate(selectedCert.certificateId);
-                    }
-                    onNavigate('auditor');
-                  }}
-                  className="btn btn-secondary"
-                  style={{ width: '100%' }}
-                >
-                  <Users size={16} /> Share With Auditor (Selective Disclosure)
-                </button>
+                    <Share2 size={14} />
+                    <span>Share with Auditor (Selective Disclosure)</span>
+                  </button>
+                )}
               </div>
             </>
           ) : (
-            <div style={{ textAlign: 'center', padding: '48px 12px', color: '#64748b' }}>
-              Select a certificate from the left list to view details.
+            <div className="text-center py-12 text-slate-500 text-xs">
+              Select a certificate from the left registry list to view detailed proofs.
             </div>
           )}
         </div>
@@ -502,55 +392,41 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
 
       {/* Revocation Modal */}
       {showRevokeModal && selectedCert && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.75)',
-            backdropFilter: 'blur(6px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 100,
-            padding: '20px',
-          }}
-        >
-          <div
-            className="glass-card"
-            style={{ maxWidth: '480px', width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}
-          >
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f87171' }}>
-              Revoke Certificate
-            </h3>
-            <p style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>
-              Revoking will permanently flag <strong>{selectedCert.certificateId}</strong> as REVOKED in the
-              ClearPass registry and on-chain records.
-            </p>
-
-            <div>
-              <label style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
-                Revocation Reason:
-              </label>
-              <textarea
-                className="input-field"
-                rows={3}
-                value={revokeReason}
-                onChange={(e) => setRevokeReason(e.target.value)}
-                placeholder="e.g. Key migration, wallet compromise, or requested by holder"
-              />
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl">
+          <div className="liquid-glass rounded-3xl p-6 w-full max-w-md border border-rose-500/30 bg-black/95 shadow-2xl flex flex-col gap-4">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <h3 className="text-sm font-semibold text-rose-400">Revoke Verification Certificate</h3>
               <button
                 onClick={() => setShowRevokeModal(false)}
-                className="btn btn-secondary btn-sm"
+                className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center text-slate-400 hover:text-white"
+              >
+                <X size={14} />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Are you sure you want to revoke certificate{' '}
+              <strong className="text-white font-mono">{selectedCert.certificateId}</strong>? Once revoked, external DeFi applications will mark this certificate as invalid.
+            </p>
+
+            <textarea
+              value={revokeReason}
+              onChange={(e) => setRevokeReason(e.target.value)}
+              placeholder="Reason for revocation (e.g. key compromise, new compliance policy)..."
+              className="input-field text-xs h-20 resize-none"
+            />
+
+            <div className="flex items-center justify-end gap-2.5 pt-2">
+              <button
+                onClick={() => setShowRevokeModal(false)}
+                className="btn btn-secondary text-xs py-2 px-4"
               >
                 Cancel
               </button>
               <button
                 onClick={handleRevoke}
                 disabled={revoking}
-                className="btn btn-danger btn-sm"
+                className="btn btn-danger text-xs py-2 px-4"
               >
                 {revoking ? 'Revoking...' : 'Confirm Revocation'}
               </button>
@@ -561,4 +437,3 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
     </div>
   );
 };
-

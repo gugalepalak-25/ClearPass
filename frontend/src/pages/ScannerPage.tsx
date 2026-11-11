@@ -13,6 +13,7 @@ import {
   Cpu,
   RefreshCw,
   ExternalLink,
+  Zap,
 } from 'lucide-react';
 import { useNearWallet } from '../wallet/NearWalletContext.js';
 import { scanWallet, issueCertificate, fetchScenarios } from '../services/api.js';
@@ -80,7 +81,6 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
     setScanStep(1);
 
     try {
-      // Simulate stepped progression for visible feedback
       setTimeout(() => setScanStep(2), 500);
       setTimeout(() => setScanStep(3), 1100);
       setTimeout(() => setScanStep(4), 1700);
@@ -122,13 +122,13 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div className="flex flex-col gap-6 w-full">
       {/* Header */}
       <div>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f0fdf4', marginBottom: '6px' }}>
+        <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight mb-1">
           Fund Risk Scanner
         </h2>
-        <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+        <p className="text-slate-400 text-xs md:text-sm">
           Evaluate native NEAR and NEP-141 transfers across up to 3 transaction hops against known flagged entities.
         </p>
       </div>
@@ -136,190 +136,155 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
       <TrustNotice />
 
       {/* Scanner Control Panel */}
-      <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#f0fdf4' }}>Assessment Parameters</h3>
+      <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl flex flex-col gap-6">
+        <h3 className="text-base font-semibold text-white flex items-center gap-2">
+          <Zap className="w-4 h-4 text-emerald-400" />
+          <span>Assessment Parameters</span>
+        </h3>
 
         {/* Demo Scenario Selectors */}
         <div>
-          <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '8px' }}>
+          <label className="text-xs font-medium text-slate-300 block mb-2.5">
             Quick Demonstration Scenarios:
           </label>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <button
               onClick={() => handleScenarioSelect('scenario_low_risk')}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px',
-                padding: '12px 14px',
-                borderRadius: '8px',
-                background: selectedScenario === 'scenario_low_risk' ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-secondary)',
-                border: selectedScenario === 'scenario_low_risk' ? '1px solid #10b981' : '1px solid var(--border-medium)',
-                textAlign: 'left',
-              }}
+              className={`flex flex-col gap-1 p-3.5 rounded-2xl text-left transition-all cursor-pointer ${
+                selectedScenario === 'scenario_low_risk'
+                  ? 'bg-emerald-500/15 border border-emerald-500/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]'
+                  : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/10'
+              }`}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#34d399' }}>Scenario 1: Low-Risk</span>
-                <span className="badge badge-approved" style={{ fontSize: '0.65rem' }}>APPROVED</span>
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-xs text-white">Clean Merchant</span>
+                <span className="badge badge-approved text-[10px]">Approved</span>
               </div>
-              <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Synthetic clean wallet within 3-hop scope</span>
+              <span className="text-[11px] text-slate-400 font-mono truncate">alice-clean-demo.testnet</span>
+              <span className="text-[10px] text-emerald-400/80">0 hops to risk entities</span>
             </button>
 
             <button
-              onClick={() => handleScenarioSelect('scenario_flagged')}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px',
-                padding: '12px 14px',
-                borderRadius: '8px',
-                background: selectedScenario === 'scenario_flagged' ? 'rgba(239, 68, 68, 0.15)' : 'var(--bg-secondary)',
-                border: selectedScenario === 'scenario_flagged' ? '1px solid #ef4444' : '1px solid var(--border-medium)',
-                textAlign: 'left',
-              }}
+              onClick={() => handleScenarioSelect('scenario_direct_risk')}
+              className={`flex flex-col gap-1 p-3.5 rounded-2xl text-left transition-all cursor-pointer ${
+                selectedScenario === 'scenario_direct_risk'
+                  ? 'bg-rose-500/15 border border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.2)]'
+                  : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/10'
+              }`}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f87171' }}>Scenario 2: Flagged</span>
-                <span className="badge badge-rejected" style={{ fontSize: '0.65rem' }}>REJECTED</span>
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-xs text-white">Direct Exposure</span>
+                <span className="badge badge-rejected text-[10px]">Rejected</span>
               </div>
-              <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Direct exposure to simulated mixer pool</span>
+              <span className="text-[11px] text-slate-400 font-mono truncate">flagged-mixer.testnet</span>
+              <span className="text-[10px] text-rose-400/80">Direct sanctions exposure</span>
             </button>
 
             <button
-              onClick={() => handleScenarioSelect('scenario_inconclusive')}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px',
-                padding: '12px 14px',
-                borderRadius: '8px',
-                background: selectedScenario === 'scenario_inconclusive' ? 'rgba(245, 158, 11, 0.15)' : 'var(--bg-secondary)',
-                border: selectedScenario === 'scenario_inconclusive' ? '1px solid #f59e0b' : '1px solid var(--border-medium)',
-                textAlign: 'left',
-              }}
+              onClick={() => handleScenarioSelect('scenario_multi_hop_risk')}
+              className={`flex flex-col gap-1 p-3.5 rounded-2xl text-left transition-all cursor-pointer ${
+                selectedScenario === 'scenario_multi_hop_risk'
+                  ? 'bg-amber-500/15 border border-amber-500/60 shadow-[0_0_20px_rgba(245,158,11,0.2)]'
+                  : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/10'
+              }`}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fbbf24' }}>Scenario 3: Insufficient</span>
-                <span className="badge badge-inconclusive" style={{ fontSize: '0.65rem' }}>INCONCLUSIVE</span>
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-xs text-white">2-Hop Sybil</span>
+                <span className="badge badge-inconclusive text-[10px]">High Risk</span>
               </div>
-              <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Empty or unindexed transaction history</span>
+              <span className="text-[11px] text-slate-400 font-mono truncate">charlie-hop2.testnet</span>
+              <span className="text-[10px] text-amber-400/80">Indirect 2-hop exposure</span>
             </button>
           </div>
         </div>
 
-        {/* Inputs */}
-        <div className="grid-2">
-          <div>
-            <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '6px' }}>
+        {/* Target Account Input & Hop Depth */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="md:col-span-2">
+            <label className="text-xs font-medium text-slate-300 block mb-1.5">
               Target NEAR Account:
             </label>
             <input
               type="text"
-              className="input-field"
               value={targetAccount}
               onChange={(e) => {
                 setTargetAccount(e.target.value);
                 setSelectedScenario('');
               }}
-              placeholder="e.g. account.testnet or demo account"
+              placeholder="e.g. user.testnet or account.near"
+              className="input-field font-mono text-xs"
             />
           </div>
 
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <div style={{ flex: 1 }}>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '6px' }}>
-                Hop Depth:
-              </label>
-              <select
-                className="input-field"
-                value={hopDepth}
-                onChange={(e) => setHopDepth(Number(e.target.value))}
-              >
-                <option value={1}>1 Hop (Direct Interactions)</option>
-                <option value={2}>2 Hops (Direct + Secondary)</option>
-                <option value={3}>3 Hops (Deep Counterparty Path)</option>
-              </select>
-            </div>
-
-            <div style={{ width: '130px' }}>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '6px' }}>
-                Network:
-              </label>
-              <div
-                style={{
-                  padding: '11px',
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border-medium)',
-                  borderRadius: '10px',
-                  fontSize: '0.85rem',
-                  color: '#34d399',
-                  fontWeight: 600,
-                  textAlign: 'center',
-                }}
-              >
-                NEAR Testnet
-              </div>
+          <div>
+            <label className="text-xs font-medium text-slate-300 block mb-1.5">
+              Traversal Hop Depth:
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {[1, 2, 3].map((h) => (
+                <button
+                  key={h}
+                  onClick={() => setHopDepth(h)}
+                  className={`py-2.5 rounded-xl text-xs font-medium transition-all ${
+                    hopDepth === h
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+                      : 'bg-white/[0.03] text-slate-400 border border-white/10 hover:bg-white/[0.06]'
+                  }`}
+                >
+                  {h} {h === 1 ? 'Hop' : 'Hops'}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* AI Explanation toggle */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <input
-            type="checkbox"
-            id="includeAi"
-            checked={includeAi}
-            onChange={(e) => setIncludeAi(e.target.checked)}
-            style={{ accentColor: '#10b981', width: '16px', height: '16px' }}
-          />
-          <label htmlFor="includeAi" style={{ fontSize: '0.85rem', color: '#cbd5e1', cursor: 'pointer' }}>
-            Include AI Risk Intelligence Explanation (Generates plain-language interpretation)
+        {/* Options & Action */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-white/10">
+          <label className="flex items-center gap-2.5 cursor-pointer text-xs text-slate-300 select-none">
+            <input
+              type="checkbox"
+              checked={includeAi}
+              onChange={(e) => setIncludeAi(e.target.checked)}
+              className="w-4 h-4 rounded accent-emerald-500 cursor-pointer"
+            />
+            <span>Include AI Risk Intelligence & Natural Language Explanation</span>
           </label>
-        </div>
 
-        {/* Submit */}
-        <div>
           <button
             onClick={handleStartScan}
             disabled={scanning}
-            className="btn btn-primary"
-            style={{ width: '100%', padding: '14px', fontSize: '0.95rem' }}
+            className="btn btn-primary text-xs md:text-sm py-2.5 px-6 shrink-0"
           >
             {scanning ? (
               <>
-                <RefreshCw size={18} className="animate-spin" /> Scanning Wallet Activity...
+                <RefreshCw size={15} className="animate-spin" />
+                <span>Evaluating Blockchain Graph...</span>
               </>
             ) : (
               <>
-                <Search size={18} /> Run Deterministic Risk Assessment
+                <Search size={15} />
+                <span>Execute Fund Risk Assessment</span>
               </>
             )}
           </button>
         </div>
 
         {scanError && (
-          <div
-            style={{
-              padding: '12px 16px',
-              borderRadius: '8px',
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#f87171',
-              fontSize: '0.85rem',
-            }}
-          >
-            {scanError}
+          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{scanError}</span>
           </div>
         )}
       </div>
 
       {/* Real-time Scanning Progress Visualizer */}
       {scanning && (
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f0fdf4' }}>
-            Risk Assessment in Progress
+        <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-emerald-500/30 bg-emerald-500/[0.02] shadow-2xl flex flex-col gap-4 animate-fade-in">
+          <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+            <span>Risk Assessment in Progress</span>
           </h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="flex flex-col gap-3">
             {[
               { step: 1, label: 'Connecting to NEAR Testnet RPC & querying account state' },
               { step: 2, label: 'Normalizing Native NEAR and NEP-141 token transaction graph' },
@@ -332,37 +297,20 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
               return (
                 <div
                   key={s.step}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    fontSize: '0.88rem',
-                    color: isDone ? '#34d399' : isCurrent ? '#f0fdf4' : '#64748b',
-                  }}
+                  className={`flex items-center gap-3 text-xs md:text-sm transition-colors ${
+                    isDone ? 'text-emerald-400 font-medium' : isCurrent ? 'text-white font-medium' : 'text-slate-500'
+                  }`}
                 >
                   <div
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      borderRadius: '50%',
-                      background: isDone
-                        ? 'rgba(16, 185, 129, 0.2)'
+                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all ${
+                      isDone
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500'
                         : isCurrent
-                        ? 'rgba(16, 185, 129, 0.1)'
-                        : 'rgba(148, 163, 184, 0.1)',
-                      border: isDone
-                        ? '1px solid #10b981'
-                        : isCurrent
-                        ? '1px solid #34d399'
-                        : '1px solid var(--border-medium)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                    }}
+                        ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-400/80 animate-pulse'
+                        : 'bg-white/[0.03] text-slate-500 border border-white/10'
+                    }`}
                   >
-                    {isDone ? <CheckCircle2 size={14} color="#10b981" /> : s.step}
+                    {isDone ? <CheckCircle2 size={13} /> : s.step}
                   </div>
                   <span>{s.label}</span>
                 </div>
@@ -375,36 +323,21 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
       {/* Assessment Results Card */}
       {assessment && (
         <div
-          className="glass-card"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px',
-            border:
-              assessment.outcome === 'APPROVED'
-                ? '1px solid rgba(16, 185, 129, 0.4)'
-                : assessment.outcome === 'REJECTED'
-                ? '1px solid rgba(239, 68, 68, 0.4)'
-                : '1px solid rgba(245, 158, 11, 0.4)',
-          }}
+          className={`liquid-glass rounded-3xl p-6 md:p-8 border shadow-2xl flex flex-col gap-6 ${
+            assessment.outcome === 'APPROVED'
+              ? 'border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.1)]'
+              : assessment.outcome === 'REJECTED'
+              ? 'border-rose-500/40 shadow-[0_0_30px_rgba(244,63,94,0.1)]'
+              : 'border-amber-500/40 shadow-[0_0_30px_rgba(245,158,11,0.1)]'
+          }`}
         >
           {/* Outcome Header */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '14px',
-              paddingBottom: '16px',
-              borderBottom: '1px solid var(--border-subtle)',
-            }}
-          >
+          <div className="flex items-center justify-between flex-wrap gap-4 pb-5 border-b border-white/10">
             <div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '4px' }}>
-                Assessment Result for <strong style={{ color: '#f0fdf4' }}>{assessment.walletAddress}</strong>
+              <div className="text-xs text-slate-400 mb-1">
+                Assessment Result for <strong className="text-white font-mono">{assessment.walletAddress}</strong>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div className="flex items-center gap-3">
                 <span
                   className={`badge ${
                     assessment.outcome === 'APPROVED'
@@ -412,26 +345,24 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
                       : assessment.outcome === 'REJECTED'
                       ? 'badge-rejected'
                       : 'badge-inconclusive'
-                  }`}
-                  style={{ fontSize: '0.95rem', padding: '6px 14px' }}
+                  } text-xs px-3.5 py-1.5`}
                 >
-                  {assessment.outcome === 'APPROVED' && <ShieldCheck size={18} />}
-                  {assessment.outcome === 'REJECTED' && <AlertOctagon size={18} />}
-                  {assessment.outcome === 'INCONCLUSIVE' && <HelpCircle size={18} />}
-                  {assessment.outcome}
+                  {assessment.outcome === 'APPROVED' && <ShieldCheck size={16} />}
+                  {assessment.outcome === 'REJECTED' && <AlertOctagon size={16} />}
+                  {assessment.outcome === 'INCONCLUSIVE' && <HelpCircle size={16} />}
+                  <span>{assessment.outcome}</span>
                 </span>
 
-                <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
+                <span className="text-xs text-slate-400">
                   Risk Score:{' '}
                   <strong
-                    style={{
-                      color:
-                        assessment.riskScore < 25
-                          ? '#34d399'
-                          : assessment.riskScore >= 50
-                          ? '#f87171'
-                          : '#fbbf24',
-                    }}
+                    className={`font-mono text-sm ${
+                      assessment.riskScore < 25
+                        ? 'text-emerald-400'
+                        : assessment.riskScore >= 50
+                        ? 'text-rose-400'
+                        : 'text-amber-400'
+                    }`}
                   >
                     {assessment.riskScore} / 100
                   </strong>
@@ -442,11 +373,11 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
             {/* Issue Certificate Action */}
             <div>
               {issuedCert ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span className="badge badge-approved" style={{ padding: '6px 12px' }}>
+                <div className="flex items-center gap-3">
+                  <span className="badge badge-approved text-xs py-1.5 px-3">
                     <CheckCircle2 size={14} /> Certificate Issued
                   </span>
-                  <button onClick={() => onNavigate('certificates')} className="btn btn-secondary btn-sm">
+                  <button onClick={() => onNavigate('certificates')} className="btn btn-secondary btn-sm text-xs">
                     View in Registry
                   </button>
                 </div>
@@ -454,49 +385,31 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
                 <button
                   onClick={handleIssueCertificate}
                   disabled={issuing}
-                  className="btn btn-primary"
-                  style={{ padding: '10px 18px' }}
+                  className="btn btn-primary text-xs py-2.5 px-5"
                 >
-                  <Award size={16} />
-                  {issuing ? 'Signing Certificate...' : 'Issue Signed Verification Certificate'}
+                  <Award size={15} />
+                  <span>{issuing ? 'Signing Certificate...' : 'Issue Signed Verification Certificate'}</span>
                 </button>
               )}
             </div>
           </div>
 
           {/* Explanation Summary */}
-          <div
-            style={{
-              padding: '16px',
-              borderRadius: '10px',
-              background: 'var(--bg-secondary)',
-              border: '1px solid var(--border-medium)',
-              fontSize: '0.9rem',
-              color: '#cbd5e1',
-              lineHeight: 1.6,
-            }}
-          >
-            <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', color: '#94a3b8', fontWeight: 600, marginBottom: '6px' }}>
+          <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 text-xs md:text-sm text-slate-300 leading-relaxed">
+            <div className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-1">
               Deterministic Engine Decision:
             </div>
             {assessment.summaryExplanation}
           </div>
 
-          {/* AI Risk Explanation (if included) */}
+          {/* AI Risk Explanation */}
           {assessment.aiExplanation && (
-            <div
-              style={{
-                padding: '16px',
-                borderRadius: '10px',
-                background: 'rgba(16, 185, 129, 0.05)',
-                border: '1px solid rgba(16, 185, 129, 0.25)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', color: '#34d399' }}>
+            <div className="p-4 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/25">
+              <div className="flex items-center gap-2 mb-2 text-emerald-400">
                 <Sparkles size={16} />
-                <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>AI Risk Intelligence Analysis</span>
+                <span className="text-xs font-bold uppercase tracking-wider">AI Risk Intelligence Analysis</span>
               </div>
-              <div style={{ fontSize: '0.88rem', color: '#cbd5e1', lineHeight: 1.6, whiteSpace: 'pre-line' }}>
+              <div className="text-xs md:text-sm text-slate-300 leading-relaxed whitespace-pre-line">
                 {assessment.aiExplanation}
               </div>
             </div>
@@ -504,92 +417,65 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
 
           {/* Findings & Risk Factors Table */}
           <div>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f0fdf4', marginBottom: '12px' }}>
+            <h4 className="text-sm font-semibold text-white mb-3">
               Identified Risk Factors ({assessment.findings.length})
             </h4>
 
             {assessment.findings.length > 0 ? (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+              <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.01]">
+                <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr style={{ borderBottom: '1px solid var(--border-medium)', color: '#94a3b8', textAlign: 'left' }}>
-                      <th style={{ padding: '8px 10px' }}>Indicator</th>
-                      <th style={{ padding: '8px 10px' }}>Severity</th>
-                      <th style={{ padding: '8px 10px' }}>Hop Distance</th>
-                      <th style={{ padding: '8px 10px' }}>Counterparty</th>
-                      <th style={{ padding: '8px 10px' }}>Penalty</th>
+                    <tr className="border-b border-white/10 text-slate-400 bg-white/[0.02]">
+                      <th className="p-3">Indicator</th>
+                      <th className="p-3">Severity</th>
+                      <th className="p-3">Hop Distance</th>
+                      <th className="p-3">Counterparty</th>
+                      <th className="p-3">Penalty</th>
                     </tr>
                   </thead>
                   <tbody>
                     {assessment.findings.map((f, i) => (
-                      <tr key={i} style={{ borderBottom: '1px solid var(--border-subtle)', color: '#f0fdf4' }}>
-                        <td style={{ padding: '10px', fontWeight: 600 }}>{f.title}</td>
-                        <td style={{ padding: '10px' }}>
+                      <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                        <td className="p-3 font-medium text-white">{f.title}</td>
+                        <td className="p-3">
                           <span
                             className={`badge ${
                               f.severity === 'CRITICAL' || f.severity === 'HIGH'
                                 ? 'badge-rejected'
                                 : 'badge-inconclusive'
-                            }`}
+                            } text-[10px]`}
                           >
                             {f.severity}
                           </span>
                         </td>
-                        <td style={{ padding: '10px' }}>{f.hopDistance === 0 ? 'Direct Match' : `${f.hopDistance} Hop`}</td>
-                        <td style={{ padding: '10px', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: '#cbd5e1' }}>
-                          {f.involvedAddress || 'N/A'}
-                        </td>
-                        <td style={{ padding: '10px', fontWeight: 700, color: '#f87171' }}>
-                          +{f.penaltyPoints}
-                        </td>
+                        <td className="p-3 text-slate-300">{f.hopDistance === 0 ? 'Direct Match' : `${f.hopDistance} Hop`}</td>
+                        <td className="p-3 font-mono text-[11px] text-slate-400">{f.involvedAddress || 'N/A'}</td>
+                        <td className="p-3 font-mono font-bold text-rose-400">+{f.penaltyPoints}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
             ) : (
-              <div
-                style={{
-                  padding: '16px',
-                  background: 'var(--bg-secondary)',
-                  borderRadius: '8px',
-                  color: '#34d399',
-                  fontSize: '0.88rem',
-                }}
-              >
+              <div className="p-4 rounded-2xl bg-emerald-500/[0.03] border border-emerald-500/20 text-emerald-400 text-xs">
                 No risk indicators identified within {assessment.scope.maxHopDepth} hops.
               </div>
             )}
           </div>
 
           {/* Assessment Scope Metadata */}
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '16px',
-              padding: '14px',
-              background: 'var(--bg-secondary)',
-              borderRadius: '8px',
-              fontSize: '0.8rem',
-              color: '#94a3b8',
-            }}
-          >
+          <div className="flex flex-wrap gap-4 p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 text-[11px] text-slate-400 font-mono">
             <div>
-              <span>Risk List Version:</span>{' '}
-              <strong style={{ color: '#f0fdf4' }}>{assessment.riskListVersion}</strong>
+              <span>Risk List:</span> <strong className="text-white">{assessment.riskListVersion}</strong>
             </div>
             <div>
-              <span>Evaluated Transactions:</span>{' '}
-              <strong style={{ color: '#f0fdf4' }}>{assessment.scope.evaluatedTxCount}</strong>
+              <span>Evaluated Txs:</span> <strong className="text-white">{assessment.scope.evaluatedTxCount}</strong>
             </div>
             <div>
-              <span>Data Completeness:</span>{' '}
-              <strong style={{ color: '#f0fdf4' }}>{assessment.scope.dataCompleteness}</strong>
+              <span>Completeness:</span> <strong className="text-white">{assessment.scope.dataCompleteness}</strong>
             </div>
             <div>
-              <span>Data Source:</span>{' '}
-              <strong style={{ color: '#f0fdf4' }}>{assessment.scope.dataSource}</strong>
+              <span>Source:</span> <strong className="text-white">{assessment.scope.dataSource}</strong>
             </div>
           </div>
         </div>
@@ -597,4 +483,3 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
     </div>
   );
 };
-

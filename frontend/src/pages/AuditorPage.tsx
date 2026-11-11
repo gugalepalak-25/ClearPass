@@ -15,6 +15,12 @@ import {
   AlertTriangle,
   RefreshCw,
   ExternalLink,
+  Sparkles,
+  FileCheck,
+  ShieldAlert,
+  ArrowRight,
+  ShieldCheck,
+  Zap,
 } from 'lucide-react';
 import {
   createAuditorShare,
@@ -157,75 +163,111 @@ export const AuditorPage: React.FC<AuditorPageProps> = ({ initialCertId }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Header */}
-      <div>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f0fdf4', marginBottom: '4px' }}>
-          Auditor Portal & Selective Disclosure
-        </h2>
-        <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
-          Share verifiable compliance evidence with authorized auditors without exposing your complete wallet history.
-        </p>
+    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto">
+      {/* Top Banner / Hero */}
+      <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-[420px] h-[300px] bg-gradient-to-bl from-teal-500/15 via-emerald-500/10 to-transparent rounded-full blur-[100px] pointer-events-none -z-10 group-hover:opacity-100 transition-opacity" />
+
+        <div className="max-w-3xl relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            <Lock className="w-3.5 h-3.5" />
+            <span>Zero-Knowledge Selective Disclosure</span>
+          </div>
+
+          <h1
+            style={{ fontFamily: "'Instrument Serif', serif" }}
+            className="text-3xl md:text-5xl font-normal tracking-tight leading-tight mb-3 bg-gradient-to-r from-white via-white/95 to-emerald-300 bg-clip-text text-transparent"
+          >
+            Auditor Portal & Selective Disclosure
+          </h1>
+
+          <p className="text-slate-300 text-sm md:text-base leading-relaxed font-light">
+            Share verifiable compliance evidence with authorized auditors, exchanges, and institutional counterparties
+            without exposing your full transaction history or counterparty addresses.
+          </p>
+        </div>
       </div>
 
       <TrustNotice />
 
       {/* Navigation Mode Tabs */}
-      <div style={{ display: 'flex', gap: '10px' }}>
+      <div className="liquid-glass rounded-2xl p-1.5 border border-white/10 flex flex-wrap gap-2 w-fit">
         <button
           onClick={() => setActiveTab('create')}
-          className={`btn ${activeTab === 'create' ? 'btn-primary' : 'btn-secondary'}`}
+          className={`px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer ${
+            activeTab === 'create'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-black shadow-lg shadow-emerald-500/20'
+              : 'text-white/70 hover:text-white hover:bg-white/[0.04]'
+          }`}
         >
-          <Lock size={16} /> 1. Create Selective Disclosure Share
+          <Lock size={15} /> 1. Create Restricted Share
         </button>
 
         <button
           onClick={() => setActiveTab('inspect')}
-          className={`btn ${activeTab === 'inspect' ? 'btn-primary' : 'btn-secondary'}`}
+          className={`px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer ${
+            activeTab === 'inspect'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-black shadow-lg shadow-emerald-500/20'
+              : 'text-white/70 hover:text-white hover:bg-white/[0.04]'
+          }`}
         >
-          <Unlock size={16} /> 2. Auditor Verification Portal
+          <Unlock size={15} /> 2. Auditor Verification Portal
         </button>
 
         <button
           onClick={() => setActiveTab('manage')}
-          className={`btn ${activeTab === 'manage' ? 'btn-primary' : 'btn-secondary'}`}
+          className={`px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer ${
+            activeTab === 'manage'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-black shadow-lg shadow-emerald-500/20'
+              : 'text-white/70 hover:text-white hover:bg-white/[0.04]'
+          }`}
         >
-          <Users size={16} /> 3. Active Shares ({shares.length})
+          <Users size={15} /> 3. Active Shares ({shares.length})
         </button>
       </div>
 
       {/* Mode 1: Create Selective Disclosure Share */}
       {activeTab === 'create' && (
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f0fdf4' }}>
-            Generate Restricted Share Request
-          </h3>
-
-          <div className="grid-2">
+        <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl flex flex-col gap-6 relative overflow-hidden">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <Lock size={20} />
+            </div>
             <div>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '6px' }}>
-                Select Certificate:
-              </label>
+              <h2 className="text-lg md:text-xl font-bold text-white">Generate Restricted Share Package</h2>
+              <p className="text-xs text-slate-400">
+                Encrypt compliance evidence with AES-256-GCM. Only grant what the auditor requires.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label className="text-xs font-semibold text-slate-300 block mb-2">Select Certificate:</label>
               <select
-                className="input-field"
+                className="w-full liquid-glass rounded-xl px-4 py-3 text-sm text-white border border-white/10 focus:border-emerald-500/50 outline-none bg-black/80 transition-all font-mono"
                 value={selectedCertId}
                 onChange={(e) => setSelectedCertId(e.target.value)}
               >
-                {certificates.map((c) => (
-                  <option key={c.certificateId} value={c.certificateId}>
-                    {c.certificateId} — {c.walletAddress} ({c.outcome})
-                  </option>
-                ))}
+                {certificates.length === 0 ? (
+                  <option value="">No certificates available (run scanner first)</option>
+                ) : (
+                  certificates.map((c) => (
+                    <option key={c.certificateId} value={c.certificateId}>
+                      {c.certificateId} — {c.walletAddress} ({c.outcome})
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
             <div>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '6px' }}>
+              <label className="text-xs font-semibold text-slate-300 block mb-2">
                 Recipient / Auditor Organization:
               </label>
               <input
                 type="text"
-                className="input-field"
+                className="w-full liquid-glass rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 border border-white/10 focus:border-emerald-500/50 outline-none bg-black/40 transition-all"
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
                 placeholder="e.g. DeFi Protocol Compliance Team, Bank Auditor"
@@ -233,161 +275,178 @@ export const AuditorPage: React.FC<AuditorPageProps> = ({ initialCertId }) => {
             </div>
           </div>
 
-          <div className="grid-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '6px' }}>
-                Share Expiration:
-              </label>
+              <label className="text-xs font-semibold text-slate-300 block mb-2">Share Expiration Window:</label>
               <select
-                className="input-field"
+                className="w-full liquid-glass rounded-xl px-4 py-3 text-sm text-white border border-white/10 focus:border-emerald-500/50 outline-none bg-black/80 transition-all"
                 value={expiresInDays}
                 onChange={(e) => setExpiresInDays(Number(e.target.value))}
               >
-                <option value={1}>1 Day</option>
+                <option value={1}>1 Day (Ephemeral Access)</option>
                 <option value={3}>3 Days</option>
-                <option value={7}>7 Days (Recommended)</option>
+                <option value={7}>7 Days (Recommended Standard)</option>
                 <option value={14}>14 Days</option>
-                <option value={30}>30 Days</option>
+                <option value={30}>30 Days (Maximum Window)</option>
               </select>
             </div>
 
             <div>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '6px' }}>
-                Custom Access Code (Optional):
+              <label className="text-xs font-semibold text-slate-300 block mb-2">
+                Custom Access Code (Optional Passphrase):
               </label>
               <input
                 type="text"
-                className="input-field"
+                className="w-full liquid-glass rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 border border-white/10 focus:border-emerald-500/50 outline-none bg-black/40 transition-all font-mono"
                 value={customAccessCode}
                 onChange={(e) => setCustomAccessCode(e.target.value)}
-                placeholder="Leave blank to auto-generate secure code"
+                placeholder="Leave blank to auto-generate high-entropy code"
               />
             </div>
           </div>
 
           {/* Privacy & Selective Disclosure Checkboxes */}
-          <div>
-            <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#34d399', display: 'block', marginBottom: '10px' }}>
-              Selective Disclosure Permissions:
-            </label>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#cbd5e1' }}>
+          <div className="liquid-glass rounded-2xl p-5 border border-white/10 flex flex-col gap-3">
+            <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-wider">
+              <ShieldCheck size={16} />
+              <span>Selective Disclosure Permissions & Redaction Controls</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+              <label className="flex items-start gap-3 p-3 rounded-xl border border-white/5 hover:border-emerald-500/30 bg-white/[0.02] cursor-pointer transition-all">
                 <input
                   type="checkbox"
+                  className="mt-0.5 accent-emerald-500 rounded"
                   checked={permissions.discloseOutcome}
                   onChange={(e) => setPermissions({ ...permissions, discloseOutcome: e.target.checked })}
-                  style={{ accentColor: '#10b981' }}
                 />
-                Disclose Assessment Outcome (APPROVED / REJECTED / INCONCLUSIVE)
+                <div>
+                  <div className="text-xs font-semibold text-white">Disclose Outcome</div>
+                  <div className="text-[11px] text-slate-400">APPROVED / REJECTED / INCONCLUSIVE certification status</div>
+                </div>
               </label>
 
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#cbd5e1' }}>
+              <label className="flex items-start gap-3 p-3 rounded-xl border border-white/5 hover:border-emerald-500/30 bg-white/[0.02] cursor-pointer transition-all">
                 <input
                   type="checkbox"
+                  className="mt-0.5 accent-emerald-500 rounded"
                   checked={permissions.discloseRiskScore}
                   onChange={(e) => setPermissions({ ...permissions, discloseRiskScore: e.target.checked })}
-                  style={{ accentColor: '#10b981' }}
                 />
-                Disclose Quantitative Risk Score (0 - 100)
+                <div>
+                  <div className="text-xs font-semibold text-white">Disclose Risk Score</div>
+                  <div className="text-[11px] text-slate-400">Quantitative risk metric (0 - 100 risk factor)</div>
+                </div>
               </label>
 
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#cbd5e1' }}>
+              <label className="flex items-start gap-3 p-3 rounded-xl border border-white/5 hover:border-emerald-500/30 bg-white/[0.02] cursor-pointer transition-all">
                 <input
                   type="checkbox"
+                  className="mt-0.5 accent-emerald-500 rounded"
                   checked={permissions.discloseScopeAndHopDepth}
                   onChange={(e) => setPermissions({ ...permissions, discloseScopeAndHopDepth: e.target.checked })}
-                  style={{ accentColor: '#10b981' }}
                 />
-                Disclose Assessment Scope & Hop Depth (e.g. 2 Hops, 90 days window)
+                <div>
+                  <div className="text-xs font-semibold text-white">Disclose Scope & Hop Depth</div>
+                  <div className="text-[11px] text-slate-400">Verification depth (e.g. 2 Hops, 90-day time boundary)</div>
+                </div>
               </label>
 
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#f87171' }}>
+              <label className="flex items-start gap-3 p-3 rounded-xl border border-white/5 hover:border-emerald-500/30 bg-white/[0.02] cursor-pointer transition-all">
                 <input
                   type="checkbox"
-                  checked={permissions.discloseRawCounterparties}
-                  onChange={(e) => setPermissions({ ...permissions, discloseRawCounterparties: e.target.checked })}
-                  style={{ accentColor: '#ef4444' }}
+                  className="mt-0.5 accent-emerald-500 rounded"
+                  checked={permissions.discloseFindingsSummary}
+                  onChange={(e) => setPermissions({ ...permissions, discloseFindingsSummary: e.target.checked })}
                 />
-                <span>
-                  Disclose Raw Counterparty Addresses (<strong>Not Recommended</strong> — Leaves private history exposed)
-                </span>
+                <div>
+                  <div className="text-xs font-semibold text-white">Disclose Findings Summary</div>
+                  <div className="text-[11px] text-slate-400">High-level risk categorizations without wallet identities</div>
+                </div>
               </label>
             </div>
+
+            <label className="flex items-start gap-3 p-3 rounded-xl border border-rose-500/20 bg-rose-500/5 hover:border-rose-500/40 cursor-pointer transition-all mt-1">
+              <input
+                type="checkbox"
+                className="mt-0.5 accent-rose-500 rounded"
+                checked={permissions.discloseRawCounterparties}
+                onChange={(e) => setPermissions({ ...permissions, discloseRawCounterparties: e.target.checked })}
+              />
+              <div>
+                <div className="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+                  <ShieldAlert size={14} /> Disclose Raw Counterparty Addresses (Not Recommended)
+                </div>
+                <div className="text-[11px] text-rose-300/80">
+                  Reveals exact wallet addresses of counterparties. Leaving this unchecked preserves financial privacy.
+                </div>
+              </div>
+            </label>
           </div>
 
           <button
             onClick={handleCreateShare}
-            disabled={creating}
-            className="btn btn-primary"
-            style={{ padding: '12px' }}
+            disabled={creating || !selectedCertId}
+            className="w-full py-3.5 px-6 rounded-full text-sm font-semibold bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 text-black shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
-            <Lock size={16} /> {creating ? 'Encrypting & Generating Share...' : 'Encrypt & Generate Selective Disclosure Token'}
+            <Lock size={16} />
+            {creating ? 'Encrypting & Generating Secure Share Token...' : 'Encrypt & Generate Selective Disclosure Token'}
           </button>
 
           {/* Created Token Output */}
           {createdShareResult && (
-            <div
-              style={{
-                marginTop: '12px',
-                padding: '16px',
-                borderRadius: '10px',
-                background: 'rgba(16, 185, 129, 0.08)',
-                border: '1px solid rgba(16, 185, 129, 0.3)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#34d399', fontWeight: 700 }}>
+            <div className="liquid-glass rounded-2xl p-6 border border-emerald-500/40 bg-emerald-500/5 flex flex-col gap-4 shadow-xl">
+              <div className="flex items-center gap-2.5 text-emerald-400 font-bold text-sm">
                 <CheckCircle2 size={18} />
                 <span>Encrypted Selective Disclosure Share Ready!</span>
               </div>
-              <p style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>
-                Provide the Share ID and Access Code to the authorized auditor. The report is encrypted with AES-256-GCM.
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Provide both the Share ID and Access Code to the authorized auditor. The report payload is encrypted
+                with AES-256-GCM authenticated encryption and stored under zero-knowledge access rules.
               </p>
 
-              <div className="grid-2">
-                <div style={{ background: 'var(--bg-secondary)', padding: '10px 12px', borderRadius: '8px' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Share ID</div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.88rem', fontFamily: 'var(--font-mono)', color: '#f0fdf4' }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="liquid-glass rounded-xl p-4 border border-white/10 flex flex-col gap-1.5 bg-black/40">
+                  <span className="text-[11px] text-slate-400 font-medium">Share ID</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-xs md:text-sm text-white font-semibold truncate">
                       {createdShareResult.share.shareId}
                     </span>
                     <button
                       onClick={() => handleCopy(createdShareResult.share.shareId, 'shareId')}
-                      style={{ background: 'transparent', color: '#94a3b8' }}
+                      className="p-1.5 rounded-lg liquid-glass hover:text-emerald-400 transition-colors text-slate-400"
                     >
-                      {copiedField === 'shareId' ? <Check size={14} color="#10b981" /> : <Copy size={14} />}
+                      {copiedField === 'shareId' ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
                     </button>
                   </div>
                 </div>
 
-                <div style={{ background: 'var(--bg-secondary)', padding: '10px 12px', borderRadius: '8px' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Access Code</div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '1rem', fontWeight: 700, fontFamily: 'var(--font-mono)', color: '#34d399' }}>
+                <div className="liquid-glass rounded-xl p-4 border border-emerald-500/30 flex flex-col gap-1.5 bg-black/40">
+                  <span className="text-[11px] text-slate-400 font-medium">Decryption Access Code</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-sm md:text-base text-emerald-400 font-bold tracking-wider truncate">
                       {createdShareResult.accessCode}
                     </span>
                     <button
                       onClick={() => handleCopy(createdShareResult.accessCode, 'accessCode')}
-                      style={{ background: 'transparent', color: '#94a3b8' }}
+                      className="p-1.5 rounded-lg liquid-glass hover:text-emerald-400 transition-colors text-slate-400"
                     >
-                      {copiedField === 'accessCode' ? <Check size={14} color="#10b981" /> : <Copy size={14} />}
+                      {copiedField === 'accessCode' ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div>
+              <div className="flex items-center gap-3 pt-2">
                 <button
                   onClick={() => {
                     setInspectShareId(createdShareResult.share.shareId);
                     setInspectAccessCode(createdShareResult.accessCode);
                     setActiveTab('inspect');
                   }}
-                  className="btn btn-secondary btn-sm"
+                  className="px-5 py-2.5 rounded-full text-xs font-semibold liquid-glass text-white hover:border-emerald-500/40 transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <Unlock size={14} /> Open in Auditor Inspection Portal
+                  <Unlock size={14} className="text-emerald-400" /> Open in Auditor Inspection Portal
                 </button>
               </div>
             </div>
@@ -397,22 +456,25 @@ export const AuditorPage: React.FC<AuditorPageProps> = ({ initialCertId }) => {
 
       {/* Mode 2: Auditor Verification Portal */}
       {activeTab === 'inspect' && (
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f0fdf4' }}>
-            Auditor Inspection Portal
-          </h3>
-          <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
-            Enter the Share ID and Access Code provided by the client to decrypt and review the selective disclosure report.
-          </p>
-
-          <div className="grid-2">
+        <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl flex flex-col gap-6 relative overflow-hidden">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/20 to-cyan-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400">
+              <Unlock size={20} />
+            </div>
             <div>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '6px' }}>
-                Share ID:
-              </label>
+              <h2 className="text-lg md:text-xl font-bold text-white">Auditor Verification & Decryption Portal</h2>
+              <p className="text-xs text-slate-400">
+                Enter the client-provided Share ID and Access Code to decrypt the authorized compliance payload.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label className="text-xs font-semibold text-slate-300 block mb-2">Share ID:</label>
               <input
                 type="text"
-                className="input-field"
+                className="w-full liquid-glass rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 border border-white/10 focus:border-emerald-500/50 outline-none bg-black/40 font-mono transition-all"
                 value={inspectShareId}
                 onChange={(e) => setInspectShareId(e.target.value)}
                 placeholder="e.g. share_173136..."
@@ -420,12 +482,10 @@ export const AuditorPage: React.FC<AuditorPageProps> = ({ initialCertId }) => {
             </div>
 
             <div>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', display: 'block', marginBottom: '6px' }}>
-                Access Code:
-              </label>
+              <label className="text-xs font-semibold text-slate-300 block mb-2">Access Code / Decryption Passphrase:</label>
               <input
                 type="text"
-                className="input-field"
+                className="w-full liquid-glass rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 border border-white/10 focus:border-emerald-500/50 outline-none bg-black/40 font-mono transition-all"
                 value={inspectAccessCode}
                 onChange={(e) => setInspectAccessCode(e.target.value)}
                 placeholder="Enter access passphrase or code"
@@ -436,85 +496,54 @@ export const AuditorPage: React.FC<AuditorPageProps> = ({ initialCertId }) => {
           <button
             onClick={handleInspect}
             disabled={inspecting}
-            className="btn btn-primary"
-            style={{ padding: '12px' }}
+            className="w-full py-3.5 px-6 rounded-full text-sm font-semibold bg-gradient-to-r from-emerald-500 to-teal-400 text-black shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
-            <Unlock size={16} /> {inspecting ? 'Decrypting Report...' : 'Decrypt & Inspect Selective Disclosure Report'}
+            <Unlock size={16} />
+            {inspecting ? 'Decrypting Restricted Report...' : 'Decrypt & Inspect Selective Disclosure Report'}
           </button>
 
           {inspectError && (
-            <div
-              style={{
-                padding: '12px',
-                borderRadius: '8px',
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                color: '#f87171',
-                fontSize: '0.85rem',
-              }}
-            >
-              {inspectError}
+            <div className="p-4 rounded-2xl liquid-glass border border-rose-500/30 bg-rose-500/10 text-rose-300 text-xs flex items-center gap-2">
+              <AlertTriangle size={16} className="text-rose-400 shrink-0" />
+              <span>{inspectError}</span>
             </div>
           )}
 
           {/* Decrypted Report Output */}
           {decryptedReport && (
-            <div
-              style={{
-                marginTop: '16px',
-                padding: '20px',
-                borderRadius: '10px',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-medium)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '12px' }}>
-                <span style={{ fontSize: '1rem', fontWeight: 700, color: '#f0fdf4' }}>
-                  Decrypted Compliance Evidence
+            <div className="liquid-glass rounded-2xl p-6 border border-emerald-500/30 bg-black/40 flex flex-col gap-5 shadow-2xl">
+              <div className="flex items-center justify-between pb-4 border-b border-white/10 flex-wrap gap-3">
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck className="text-emerald-400 w-5 h-5" />
+                  <span className="text-base font-bold text-white">Decrypted Compliance Evidence</span>
+                </div>
+                <span className="badge badge-approved text-xs px-3 py-1 rounded-full font-semibold">
+                  Decrypted & Authenticated
                 </span>
-                <span className="badge badge-approved">Decrypted & Verified</span>
               </div>
 
-              <div
-                style={{
-                  padding: '12px',
-                  borderRadius: '8px',
-                  background: 'rgba(16, 185, 129, 0.05)',
-                  border: '1px solid rgba(16, 185, 129, 0.2)',
-                  fontSize: '0.82rem',
-                  color: '#34d399',
-                }}
-              >
-                {decryptedReport.confidentialityNotice || 'Raw transaction history redacted under zero-knowledge selective disclosure.'}
+              <div className="p-3.5 rounded-xl liquid-glass border border-emerald-500/20 bg-emerald-500/5 text-xs text-emerald-300 leading-relaxed">
+                {decryptedReport.confidentialityNotice ||
+                  'Raw transaction history redacted under zero-knowledge selective disclosure.'}
               </div>
 
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '12px',
-                  fontSize: '0.85rem',
-                }}
-              >
-                <div>
-                  <span style={{ color: '#64748b', display: 'block' }}>Certificate ID</span>
-                  <span style={{ fontWeight: 600, color: '#f0fdf4', fontFamily: 'var(--font-mono)' }}>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+                <div className="liquid-glass rounded-xl p-3 border border-white/5 bg-white/[0.02]">
+                  <span className="text-slate-400 block mb-1">Certificate ID</span>
+                  <span className="font-mono text-white font-semibold break-all">
                     {decryptedReport.certificateId}
                   </span>
                 </div>
 
-                <div>
-                  <span style={{ color: '#64748b', display: 'block' }}>Verified Outcome</span>
+                <div className="liquid-glass rounded-xl p-3 border border-white/5 bg-white/[0.02]">
+                  <span className="text-slate-400 block mb-1">Verified Outcome</span>
                   <span
-                    className={`badge ${
+                    className={`inline-block font-semibold ${
                       decryptedReport.outcome === 'APPROVED'
-                        ? 'badge-approved'
+                        ? 'text-emerald-400'
                         : decryptedReport.outcome === 'REJECTED'
-                        ? 'badge-rejected'
-                        : 'badge-inconclusive'
+                        ? 'text-rose-400'
+                        : 'text-amber-400'
                     }`}
                   >
                     {decryptedReport.outcome}
@@ -522,37 +551,41 @@ export const AuditorPage: React.FC<AuditorPageProps> = ({ initialCertId }) => {
                 </div>
 
                 {decryptedReport.riskScore !== undefined && (
-                  <div>
-                    <span style={{ color: '#64748b', display: 'block' }}>Risk Score</span>
-                    <span style={{ fontWeight: 700, color: decryptedReport.riskScore < 25 ? '#34d399' : '#f87171' }}>
+                  <div className="liquid-glass rounded-xl p-3 border border-white/5 bg-white/[0.02]">
+                    <span className="text-slate-400 block mb-1">Risk Score</span>
+                    <span
+                      className={`font-mono font-bold text-sm ${
+                        decryptedReport.riskScore < 25 ? 'text-emerald-400' : 'text-rose-400'
+                      }`}
+                    >
                       {decryptedReport.riskScore} / 100
                     </span>
                   </div>
                 )}
 
                 {decryptedReport.hopDepth && (
-                  <div>
-                    <span style={{ color: '#64748b', display: 'block' }}>Verified Hop Depth</span>
-                    <span style={{ color: '#f0fdf4' }}>{decryptedReport.hopDepth} Hops</span>
+                  <div className="liquid-glass rounded-xl p-3 border border-white/5 bg-white/[0.02]">
+                    <span className="text-slate-400 block mb-1">Verified Hop Depth</span>
+                    <span className="text-white font-semibold">{decryptedReport.hopDepth} Hops</span>
                   </div>
                 )}
 
-                <div>
-                  <span style={{ color: '#64748b', display: 'block' }}>Network</span>
-                  <span style={{ color: '#34d399' }}>{decryptedReport.network}</span>
+                <div className="liquid-glass rounded-xl p-3 border border-white/5 bg-white/[0.02]">
+                  <span className="text-slate-400 block mb-1">Network</span>
+                  <span className="text-teal-400 font-semibold">{decryptedReport.network}</span>
                 </div>
 
-                <div>
-                  <span style={{ color: '#64748b', display: 'block' }}>Issuer Authority</span>
-                  <span style={{ color: '#f0fdf4' }}>{decryptedReport.issuerIdentity}</span>
+                <div className="liquid-glass rounded-xl p-3 border border-white/5 bg-white/[0.02]">
+                  <span className="text-slate-400 block mb-1">Issuer Authority</span>
+                  <span className="text-white font-semibold truncate block">
+                    {decryptedReport.issuerIdentity}
+                  </span>
                 </div>
               </div>
 
-              <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '12px' }}>
-                <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', marginBottom: '4px' }}>
-                  Issuer Digital Signature
-                </span>
-                <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: '#94a3b8', wordBreak: 'break-all' }}>
+              <div className="pt-3 border-t border-white/10 flex flex-col gap-1.5">
+                <span className="text-[11px] text-slate-400">Issuer Cryptographic Signature (Ed25519)</span>
+                <span className="text-[11px] font-mono text-slate-300 break-all p-3 rounded-xl liquid-glass border border-white/10 bg-black/50 select-all">
                   {decryptedReport.digitalSignature}
                 </span>
               </div>
@@ -563,66 +596,72 @@ export const AuditorPage: React.FC<AuditorPageProps> = ({ initialCertId }) => {
 
       {/* Mode 3: Active Shares Manager */}
       {activeTab === 'manage' && (
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#f0fdf4' }}>
-              Active Selective Disclosure Shares
-            </h3>
-            <button onClick={loadData} className="btn btn-secondary btn-sm">
-              <RefreshCw size={14} /> Refresh
+        <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl flex flex-col gap-5 relative overflow-hidden">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <Users size={20} />
+              </div>
+              <div>
+                <h2 className="text-lg md:text-xl font-bold text-white">Active Selective Disclosure Shares</h2>
+                <p className="text-xs text-slate-400">
+                  Manage granted auditor tokens, view validity dates, or instantly revoke access.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={loadData}
+              className="px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-white/80 hover:text-white hover:border-white/20 transition-all flex items-center gap-2 cursor-pointer"
+            >
+              <RefreshCw size={13} /> Refresh
             </button>
           </div>
 
           {shares.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div className="flex flex-col gap-3">
               {shares.map((share) => (
                 <div
                   key={share.shareId}
-                  style={{
-                    padding: '14px',
-                    borderRadius: '8px',
-                    background: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-subtle)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    flexWrap: 'wrap',
-                    gap: '12px',
-                  }}
+                  className="liquid-glass rounded-2xl p-5 border border-white/10 hover:border-emerald-500/30 transition-all flex items-center justify-between flex-wrap gap-4 bg-white/[0.01]"
                 >
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                      <span style={{ fontWeight: 700, color: '#f0fdf4', fontSize: '0.9rem' }}>
-                        {share.recipientName}
-                      </span>
+                  <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2.5">
+                      <span className="font-bold text-white text-sm md:text-base">{share.recipientName}</span>
                       <span
-                        className={`badge ${
+                        className={`text-[11px] px-2.5 py-0.5 rounded-full font-semibold ${
                           share.status === 'ACTIVE'
-                            ? 'badge-approved'
+                            ? 'badge badge-approved'
                             : share.status === 'EXPIRED'
-                            ? 'badge-inconclusive'
-                            : 'badge-rejected'
+                            ? 'badge badge-inconclusive'
+                            : 'badge badge-rejected'
                         }`}
-                        style={{ fontSize: '0.65rem' }}
                       >
                         {share.status}
                       </span>
                     </div>
 
-                    <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
-                      Share ID: <code style={{ color: '#cbd5e1' }}>{share.shareId}</code> | Target:{' '}
-                      <code style={{ color: '#34d399' }}>{share.walletAddress}</code>
+                    <div className="text-xs text-slate-400 flex items-center gap-2 flex-wrap">
+                      <span>
+                        Share ID: <code className="text-white font-mono">{share.shareId}</code>
+                      </span>
+                      <span>•</span>
+                      <span>
+                        Target: <code className="text-emerald-400 font-mono">{share.walletAddress}</code>
+                      </span>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                      Expires: {new Date(share.expiresAt).toLocaleDateString()}
+                  <div className="flex items-center gap-4">
+                    <div className="text-xs text-slate-400 flex items-center gap-1.5">
+                      <Clock size={13} />
+                      <span>Expires: {new Date(share.expiresAt).toLocaleDateString()}</span>
                     </div>
+
                     {share.status === 'ACTIVE' && (
                       <button
                         onClick={() => handleRevokeShare(share.shareId)}
-                        className="btn btn-danger btn-sm"
+                        className="px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-rose-400 border border-rose-500/30 hover:bg-rose-500/10 hover:border-rose-500/50 transition-all cursor-pointer"
                       >
                         Revoke Access
                       </button>
@@ -632,7 +671,7 @@ export const AuditorPage: React.FC<AuditorPageProps> = ({ initialCertId }) => {
               ))}
             </div>
           ) : (
-            <div style={{ textAlign: 'center', padding: '32px 12px', color: '#64748b' }}>
+            <div className="liquid-glass rounded-2xl p-12 text-center text-slate-400 text-sm border border-dashed border-white/10">
               No selective disclosure share tokens created yet.
             </div>
           )}
@@ -641,4 +680,3 @@ export const AuditorPage: React.FC<AuditorPageProps> = ({ initialCertId }) => {
     </div>
   );
 };
-

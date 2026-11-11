@@ -28,32 +28,26 @@ export const StatCard: React.FC<StatCardProps> = ({
       : 'badge-neutral';
 
   return (
-    <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: 500 }}>{title}</span>
-        <div
-          style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '8px',
-            background: 'rgba(16, 185, 129, 0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#34d399',
-          }}
-        >
-          <Icon size={18} />
+    <div className="glass-card flex flex-col justify-between group hover:border-emerald-500/40 transition-all duration-300">
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{title}</span>
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500/10 via-cyan-500/10 to-transparent border border-white/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:text-emerald-300 transition-all">
+            <Icon size={18} />
+          </div>
+        </div>
+
+        <div className="flex items-baseline gap-2.5 my-1">
+          <span className="text-3xl font-extrabold text-white tracking-tight font-mono">
+            {value}
+          </span>
+          {badge && <span className={`badge ${badgeClass} text-[10px]`}>{badge}</span>}
         </div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '4px' }}>
-        <span style={{ fontSize: '1.75rem', fontWeight: 700, color: '#f0fdf4', letterSpacing: '-0.02em' }}>
-          {value}
-        </span>
-        {badge && <span className={`badge ${badgeClass}`}>{badge}</span>}
-      </div>
-      {subtitle && <span style={{ fontSize: '0.78rem', color: '#64748b' }}>{subtitle}</span>}
+
+      {subtitle && (
+        <span className="text-xs text-slate-500 mt-2 font-mono truncate">{subtitle}</span>
+      )}
     </div>
   );
 };
-
