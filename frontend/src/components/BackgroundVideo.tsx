@@ -109,10 +109,10 @@ export const BackgroundVideo: React.FC = () => {
         }}
       />
 
-      {/* Radiant Aurora Mesh Glows */}
-      <div className="absolute top-[-10%] left-[-5%] w-[650px] h-[550px] bg-gradient-to-br from-emerald-500/25 via-teal-500/15 to-transparent rounded-full blur-[140px] animate-pulse duration-7000 -z-20" />
-      <div className="absolute top-[20%] right-[-10%] w-[700px] h-[600px] bg-gradient-to-bl from-cyan-500/20 via-blue-600/15 to-transparent rounded-full blur-[150px] -z-20" />
-      <div className="absolute bottom-[-15%] left-[25%] w-[600px] h-[500px] bg-gradient-to-t from-violet-600/20 via-indigo-500/10 to-transparent rounded-full blur-[160px] -z-20" />
+      {/* Radiant Aurora Mesh Glows in Cyber-Purple */}
+      <div className="absolute top-[-10%] left-[-5%] w-[650px] h-[550px] bg-gradient-to-br from-purple-600/30 via-violet-600/20 to-transparent rounded-full blur-[140px] animate-pulse duration-7000 -z-20" />
+      <div className="absolute top-[20%] right-[-10%] w-[700px] h-[600px] bg-gradient-to-bl from-fuchsia-600/25 via-indigo-600/20 to-transparent rounded-full blur-[150px] -z-20" />
+      <div className="absolute bottom-[-15%] left-[25%] w-[600px] h-[500px] bg-gradient-to-t from-violet-600/25 via-purple-500/15 to-transparent rounded-full blur-[160px] -z-20" />
 
       {/* Mux HLS Background Video with Holographic blend */}
       <video

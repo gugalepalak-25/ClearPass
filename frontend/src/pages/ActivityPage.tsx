@@ -54,10 +54,10 @@ export const ActivityPage: React.FC = () => {
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto">
       {/* Top Banner / Hero */}
       <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-[420px] h-[300px] bg-gradient-to-bl from-cyan-500/15 via-emerald-500/10 to-transparent rounded-full blur-[100px] pointer-events-none -z-10 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute top-0 right-0 w-[420px] h-[300px] bg-gradient-to-bl from-purple-600/30 via-violet-600/20 to-transparent rounded-full blur-[100px] pointer-events-none -z-10 group-hover:opacity-100 transition-opacity" />
 
         <div className="max-w-3xl relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4">
             <ActivityIcon className="w-3.5 h-3.5" />
             <span>Immutable Protocol Audit Trail</span>
           </div>
@@ -67,7 +67,7 @@ export const ActivityPage: React.FC = () => {
             className="text-3xl md:text-5xl font-normal text-white tracking-tight leading-tight mb-3"
           >
             Protocol Activity &{' '}
-            <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-400 via-fuchsia-300 to-violet-300 bg-clip-text text-transparent">
               Audit Trail
             </span>
           </h1>
@@ -86,7 +86,7 @@ export const ActivityPage: React.FC = () => {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none" />
           <input
             type="text"
-            className="w-full liquid-glass rounded-2xl pl-11 pr-4 py-3 text-sm text-white placeholder-white/30 border border-white/10 focus:border-cyan-500/50 outline-none bg-black/40 transition-all"
+            className="w-full liquid-glass rounded-2xl pl-11 pr-4 py-3 text-sm text-white placeholder-white/30 border border-white/10 focus:border-purple-500/50 outline-none bg-black/40 transition-all font-mono"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by wallet account, cert ID, or keyword..."
@@ -110,7 +110,7 @@ export const ActivityPage: React.FC = () => {
                 onClick={() => setFilterType(tab.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-gradient-to-r from-cyan-500 to-emerald-400 text-black shadow-md shadow-cyan-500/20'
+                    ? 'bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white shadow-md shadow-purple-500/25'
                     : 'liquid-glass text-white/70 hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
@@ -133,7 +133,7 @@ export const ActivityPage: React.FC = () => {
       <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl flex flex-col gap-4">
         <div className="flex items-center justify-between pb-3 border-b border-white/10">
           <div className="flex items-center gap-2 text-sm font-bold text-white">
-            <Clock size={16} className="text-cyan-400" />
+            <Clock size={16} className="text-purple-400" />
             <span>Event Feed ({filtered.length} entries)</span>
           </div>
           <span className="text-xs text-slate-400">Live NEAR Testnet Feed</span>
@@ -153,20 +153,20 @@ export const ActivityPage: React.FC = () => {
               return (
                 <div
                   key={item.id}
-                  className="liquid-glass rounded-2xl p-4 md:p-5 border border-white/10 hover:border-cyan-500/30 transition-all flex items-start justify-between flex-wrap md:flex-nowrap gap-4 bg-white/[0.01]"
+                  className="liquid-glass rounded-2xl p-4 md:p-5 border border-white/10 hover:border-purple-500/30 transition-all flex items-start justify-between flex-wrap md:flex-nowrap gap-4 bg-white/[0.01]"
                 >
                   <div className="flex items-start gap-4">
                     {/* Glowing Event Icon */}
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border mt-0.5 ${
                         isScan
-                          ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 shadow-sm shadow-cyan-500/20'
+                          ? 'bg-purple-500/10 border-purple-500/30 text-purple-400 shadow-sm shadow-purple-500/20'
                           : isCert
                           ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-sm shadow-emerald-500/20'
                           : isVerify
-                          ? 'bg-teal-500/10 border-teal-500/30 text-teal-400 shadow-sm shadow-teal-500/20'
+                          ? 'bg-violet-500/10 border-violet-500/30 text-violet-400 shadow-sm shadow-violet-500/20'
                           : isShare
-                          ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-400 shadow-sm shadow-indigo-500/20'
+                          ? 'bg-fuchsia-500/10 border-fuchsia-500/30 text-fuchsia-400 shadow-sm shadow-fuchsia-500/20'
                           : 'bg-rose-500/10 border-rose-500/30 text-rose-400 shadow-sm shadow-rose-500/20'
                       }`}
                     >
@@ -191,7 +191,7 @@ export const ActivityPage: React.FC = () => {
                             <span>•</span>
                             <span className="flex items-center gap-1.5">
                               Cert:{' '}
-                              <code className="text-cyan-400 font-mono font-semibold">
+                              <code className="text-purple-300 font-mono font-semibold">
                                 {item.certificateId}
                               </code>
                             </span>

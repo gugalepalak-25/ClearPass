@@ -277,7 +277,7 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, 
                             {w.name}
                           </span>
                           {w.popular && (
-                            <span className="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            <span className="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">
                               Popular
                             </span>
                           )}
@@ -333,9 +333,9 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, 
 
                 <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/10 text-xs text-white/60 space-y-1">
                   <div className="font-medium text-white/80">Address Guidelines:</div>
-                  <div>• Named accounts: <code className="text-emerald-400">yourname.testnet</code> or <code className="text-emerald-400">account.near</code></div>
+                  <div>• Named accounts: <code className="text-purple-300">yourname.testnet</code> or <code className="text-purple-300">account.near</code></div>
                   <div>• Implicit accounts: 64-hex string derived from Ed25519 public key</div>
-                  <div>• Subaccounts: <code className="text-emerald-400">treasury.foundation.near</code></div>
+                  <div>• Subaccounts: <code className="text-purple-300">treasury.foundation.near</code></div>
                 </div>
 
                 <button
@@ -383,7 +383,7 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, 
           {/* Footer Security Note */}
           <div className="px-6 py-3 border-t border-white/10 bg-white/[0.01] flex items-center justify-between text-[11px] text-white/50">
             <span className="flex items-center gap-1.5">
-              <Shield className="w-3 h-3 text-emerald-400" />
+              <Shield className="w-3 h-3 text-purple-400" />
               <span>Zero-knowledge: ClearPass never asks for private keys or seed phrases</span>
             </span>
           </div>

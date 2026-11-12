@@ -7,7 +7,7 @@ interface StatCardProps {
   subtitle?: string;
   icon: LucideIcon;
   badge?: string;
-  badgeColor?: 'emerald' | 'amber' | 'red' | 'neutral';
+  badgeColor?: 'emerald' | 'purple' | 'amber' | 'red' | 'neutral';
 }
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -16,10 +16,12 @@ export const StatCard: React.FC<StatCardProps> = ({
   subtitle,
   icon: Icon,
   badge,
-  badgeColor = 'emerald',
+  badgeColor = 'purple',
 }) => {
   const badgeClass =
-    badgeColor === 'emerald'
+    badgeColor === 'purple'
+      ? 'badge-purple'
+      : badgeColor === 'emerald'
       ? 'badge-approved'
       : badgeColor === 'amber'
       ? 'badge-inconclusive'
@@ -28,11 +30,11 @@ export const StatCard: React.FC<StatCardProps> = ({
       : 'badge-neutral';
 
   return (
-    <div className="glass-card flex flex-col justify-between group hover:border-emerald-500/40 transition-all duration-300">
+    <div className="glass-card flex flex-col justify-between group hover:border-purple-500/40 transition-all duration-300">
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{title}</span>
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500/10 via-cyan-500/10 to-transparent border border-white/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:text-emerald-300 transition-all">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-500/15 via-violet-500/15 to-transparent border border-white/10 flex items-center justify-center text-purple-400 group-hover:scale-110 group-hover:text-purple-300 transition-all">
             <Icon size={18} />
           </div>
         </div>

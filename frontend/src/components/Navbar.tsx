@@ -103,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {!isConnected ? (
             <button
               onClick={() => connect()}
-              className="rounded-full px-5 py-2 text-xs font-semibold text-slate-950 bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.45)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2 shadow-lg"
+              className="rounded-full px-5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 hover:shadow-[0_0_24px_rgba(168,85,247,0.55)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2 shadow-lg border border-white/20"
             >
               <Wallet className="w-4 h-4 stroke-[2.5]" />
               <span>Connect Wallet</span>
@@ -112,10 +112,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="relative">
               <button
                 onClick={() => setShowWalletMenu(!showWalletMenu)}
-                className="liquid-glass rounded-full px-4 py-1.5 text-sm font-medium text-white hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all cursor-pointer flex items-center gap-2"
+                className="liquid-glass rounded-full px-4 py-1.5 text-sm font-medium text-white hover:border-purple-500/40 hover:shadow-[0_0_15px_rgba(168,85,247,0.25)] transition-all cursor-pointer flex items-center gap-2"
               >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
-                <span className="font-mono text-xs max-w-[130px] truncate text-emerald-300">
+                <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_#c084fc]" />
+                <span className="font-mono text-xs max-w-[130px] truncate text-purple-300">
                   {accountId}
                 </span>
                 <ChevronDown className="w-3.5 h-3.5 text-white/60" />
@@ -142,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           onClick={handleCopy}
                           className="flex items-center gap-1 px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-white/90 text-[11px]"
                         >
-                          {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                          {copied ? <Check className="w-3 h-3 text-purple-400" /> : <Copy className="w-3 h-3" />}
                           <span>{copied ? 'Copied' : 'Copy'}</span>
                         </button>
                         <a
@@ -166,12 +166,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                         }}
                         className="w-full flex items-center gap-2 px-2 py-1.5 rounded bg-white/10 hover:bg-white/15 text-white text-[11px] font-medium transition-colors mb-2"
                       >
-                        <Wallet className="w-3.5 h-3.5 text-emerald-400" />
+                        <Wallet className="w-3.5 h-3.5 text-purple-400" />
                         <span>Connect Another Wallet / Address</span>
                       </button>
 
                       <div className="text-white/50 text-[10px] uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-emerald-400" />
+                        <Sparkles className="w-3 h-3 text-purple-400" />
                         <span>Demo Test Profiles</span>
                       </div>
                       <div className="flex flex-col gap-1">
@@ -180,7 +180,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             simulateAccount('clean-merchant.testnet');
                             setShowWalletMenu(false);
                           }}
-                          className="text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] text-emerald-300"
+                          className="text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] text-purple-300"
                         >
                           clean-merchant.testnet (Clean)
                         </button>

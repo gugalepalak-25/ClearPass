@@ -162,7 +162,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
             onClick={() => setFilter(tab.id)}
             className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               filter === tab.id
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/60 shadow-[0_0_12px_rgba(16,185,129,0.25)]'
+                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/60 shadow-[0_0_12px_rgba(168,85,247,0.3)]'
                 : 'bg-white/[0.03] text-slate-400 border border-white/10 hover:bg-white/[0.06] hover:text-white'
             }`}
           >
@@ -191,7 +191,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
                   }}
                   className={`p-3.5 rounded-2xl cursor-pointer flex flex-col gap-1.5 transition-all ${
                     isSelected
-                      ? 'bg-emerald-500/15 border border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
+                      ? 'bg-purple-500/15 border border-purple-500/50 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
                       : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/10'
                   }`}
                 >
@@ -332,7 +332,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
 
                 <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10">
                   <span className="text-slate-400 block mb-1">On-Chain Anchor</span>
-                  <span className="text-emerald-400 font-mono font-semibold">
+                  <span className="text-purple-300 font-mono font-semibold">
                     {selectedCert.onChainTxHash ? 'Stored on NEAR' : 'Ready to Anchor'}
                   </span>
                 </div>
@@ -341,14 +341,14 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({
               {/* Cryptographic Proof Details */}
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-xs font-semibold text-white">
-                  <Key size={14} className="text-emerald-400" />
+                  <Key size={14} className="text-purple-400" />
                   <span>Ed25519 Cryptographic Proof Details</span>
                 </div>
 
                 <div className="space-y-2 text-xs font-mono">
                   <div className="flex justify-between items-center p-2 rounded-xl bg-black/40">
                     <span className="text-slate-400 text-[11px]">Issuer Public Key:</span>
-                    <span className="text-emerald-300 text-[11px] truncate max-w-[280px]">
+                    <span className="text-purple-300 text-[11px] truncate max-w-[280px]">
                       {selectedCert.issuerPublicKey}
                     </span>
                   </div>

@@ -4,11 +4,11 @@ import { ShieldCheck } from 'lucide-react';
 export const TrustNotice: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
   return (
     <div
-      className={`liquid-glass rounded-2xl flex items-start gap-3.5 border border-emerald-500/25 bg-emerald-500/[0.03] backdrop-blur-xl shadow-[0_0_20px_rgba(16,185,129,0.08)] ${
+      className={`liquid-glass rounded-2xl flex items-start gap-3.5 border border-purple-500/30 bg-purple-500/[0.04] backdrop-blur-xl shadow-[0_0_20px_rgba(168,85,247,0.12)] ${
         compact ? 'p-3 text-xs' : 'p-4 md:p-5 text-sm my-2 mb-6'
       }`}
     >
-      <div className="text-emerald-400 shrink-0 mt-0.5 p-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+      <div className="text-purple-400 shrink-0 mt-0.5 p-1 rounded-lg bg-purple-500/15 border border-purple-500/25">
         <ShieldCheck size={compact ? 16 : 18} />
       </div>
       <div className="leading-relaxed">

@@ -123,10 +123,10 @@ export const Hero: React.FC<HeroProps> = ({
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ duration: 0.2 }}
                 onClick={() => setFormOpen(true)}
-                className="px-10 py-3 text-[14px] font-semibold border border-emerald-500/30 rounded-full bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-emerald-500/10 hover:border-emerald-400 hover:shadow-[0_0_24px_rgba(16,185,129,0.3)] transition-all duration-300 text-white backdrop-blur-md cursor-pointer flex items-center gap-2 group"
+                className="px-10 py-3 text-[14px] font-semibold border border-purple-500/30 rounded-full bg-gradient-to-r from-purple-500/15 via-violet-500/15 to-fuchsia-500/15 hover:border-purple-400 hover:shadow-[0_0_28px_rgba(168,85,247,0.4)] transition-all duration-300 text-white backdrop-blur-md cursor-pointer flex items-center gap-2 group"
               >
                 <span>Get early access & scan wallet</span>
-                <ArrowRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-purple-300 group-hover:translate-x-0.5 transition-transform" />
               </motion.button>
             ) : (
               <motion.form
@@ -136,7 +136,7 @@ export const Hero: React.FC<HeroProps> = ({
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ duration: 0.2 }}
                 onSubmit={handleSubmit}
-                className="flex items-center gap-2 pl-5 pr-1.5 py-1.5 text-[14px] font-medium border border-emerald-500/40 rounded-full bg-slate-900/90 backdrop-blur-xl w-full max-w-[380px] shadow-[0_0_25px_rgba(16,185,129,0.2)] focus-within:border-emerald-400 focus-within:shadow-[0_0_30px_rgba(16,185,129,0.35)] transition-all duration-300"
+                className="flex items-center gap-2 pl-5 pr-1.5 py-1.5 text-[14px] font-medium border border-purple-500/40 rounded-full bg-slate-900/90 backdrop-blur-xl w-full max-w-[380px] shadow-[0_0_25px_rgba(168,85,247,0.25)] focus-within:border-purple-400 focus-within:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all duration-300"
               >
                 <input
                   type="text"
@@ -150,13 +150,13 @@ export const Hero: React.FC<HeroProps> = ({
                 <button
                   type="submit"
                   disabled={isSubmitted || !inputValue.trim()}
-                  className="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 flex items-center justify-center text-slate-950 font-bold hover:scale-105 disabled:opacity-40 transition-transform cursor-pointer shrink-0"
+                  className="w-8 h-8 rounded-full bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 flex items-center justify-center text-white font-bold hover:scale-105 disabled:opacity-40 transition-transform cursor-pointer shrink-0 shadow-md shadow-purple-500/30"
                   aria-label="Submit"
                 >
                   {isSubmitted ? (
-                    <Check className="w-4 h-4 text-slate-950 stroke-[3]" />
+                    <Check className="w-4 h-4 text-white stroke-[3]" />
                   ) : (
-                    <ArrowRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
+                    <ArrowRight className="w-4 h-4 text-white stroke-[2.5]" />
                   )}
                 </button>
               </motion.form>

@@ -53,10 +53,10 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
     <div className="flex flex-col gap-6 w-full">
       {/* Top Banner / Hero */}
       <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-[400px] h-[300px] bg-gradient-to-bl from-emerald-500/15 via-cyan-500/10 to-transparent rounded-full blur-[100px] pointer-events-none -z-10 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute top-0 right-0 w-[420px] h-[320px] bg-gradient-to-bl from-purple-600/30 via-violet-600/20 to-transparent rounded-full blur-[100px] pointer-events-none -z-10 group-hover:opacity-100 transition-opacity" />
 
         <div className="max-w-3xl relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Privacy-Preserving Fund Risk Protocol</span>
           </div>
@@ -66,7 +66,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
             className="text-3xl md:text-5xl font-normal text-white tracking-tight leading-tight mb-3"
           >
             Prove your funds are clean,{' '}
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-400 via-fuchsia-300 to-violet-300 bg-clip-text text-transparent">
               without revealing your history.
             </span>
           </h1>
@@ -98,7 +98,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
           subtitle="Issued certificates"
           icon={Award}
           badge="+Live"
-          badgeColor="emerald"
+          badgeColor="purple"
         />
         <StatCard
           title="Approved Certificates"
@@ -122,7 +122,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
           subtitle="RPC: rpc.testnet.near.org"
           icon={ShieldCheck}
           badge="Online"
-          badgeColor="emerald"
+          badgeColor="purple"
         />
       </div>
 
@@ -140,7 +140,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
               <div>
                 <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 mb-4">
                   <div className="text-[11px] text-slate-400 uppercase tracking-wider mb-1">Active Account ID</div>
-                  <div className="text-sm md:text-base font-mono font-semibold text-emerald-400 break-all">
+                  <div className="text-sm md:text-base font-mono font-semibold text-purple-300 break-all">
                     {accountId}
                   </div>
                 </div>
@@ -236,9 +236,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
       <div className="grid-3">
         <div
           onClick={() => onNavigate('scanner')}
-          className="glass-card cursor-pointer group hover:border-emerald-500/40 transition-all"
+          className="glass-card cursor-pointer group hover:border-purple-500/40 transition-all"
         >
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
             <Search size={20} />
           </div>
           <h4 className="text-sm font-semibold text-white mb-1.5">Risk Scanner</h4>
@@ -249,9 +249,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
 
         <div
           onClick={() => onNavigate('auditor')}
-          className="glass-card cursor-pointer group hover:border-cyan-500/40 transition-all"
+          className="glass-card cursor-pointer group hover:border-violet-500/40 transition-all"
         >
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
             <Users size={20} />
           </div>
           <h4 className="text-sm font-semibold text-white mb-1.5">Auditor Portal</h4>
@@ -262,9 +262,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
 
         <div
           onClick={() => onNavigate('settings')}
-          className="glass-card cursor-pointer group hover:border-violet-500/40 transition-all"
+          className="glass-card cursor-pointer group hover:border-fuchsia-500/40 transition-all"
         >
-          <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
             <ShieldCheck size={20} />
           </div>
           <h4 className="text-sm font-semibold text-white mb-1.5">Protocol & Risk List</h4>
@@ -278,7 +278,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
       <div className="glass-card">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
             <h3 className="text-sm md:text-base font-semibold text-white">Recent Protocol Activity</h3>
           </div>
           <button onClick={() => onNavigate('activity')} className="btn btn-secondary btn-sm text-xs">

@@ -138,7 +138,7 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
       {/* Scanner Control Panel */}
       <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl flex flex-col gap-6">
         <h3 className="text-base font-semibold text-white flex items-center gap-2">
-          <Zap className="w-4 h-4 text-emerald-400" />
+          <Zap className="w-4 h-4 text-purple-400" />
           <span>Assessment Parameters</span>
         </h3>
 
@@ -152,7 +152,7 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
               onClick={() => handleScenarioSelect('scenario_low_risk')}
               className={`flex flex-col gap-1 p-3.5 rounded-2xl text-left transition-all cursor-pointer ${
                 selectedScenario === 'scenario_low_risk'
-                  ? 'bg-emerald-500/15 border border-emerald-500/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]'
+                  ? 'bg-purple-500/15 border border-purple-500/60 shadow-[0_0_20px_rgba(168,85,247,0.25)]'
                   : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/10'
               }`}
             >
@@ -161,7 +161,7 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
                 <span className="badge badge-approved text-[10px]">Approved</span>
               </div>
               <span className="text-[11px] text-slate-400 font-mono truncate">alice-clean-demo.testnet</span>
-              <span className="text-[10px] text-emerald-400/80">0 hops to risk entities</span>
+              <span className="text-[10px] text-purple-300">0 hops to risk entities</span>
             </button>
 
             <button
@@ -227,7 +227,7 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
                   onClick={() => setHopDepth(h)}
                   className={`py-2.5 rounded-xl text-xs font-medium transition-all ${
                     hopDepth === h
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+                      ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50 shadow-[0_0_12px_rgba(168,85,247,0.3)]'
                       : 'bg-white/[0.03] text-slate-400 border border-white/10 hover:bg-white/[0.06]'
                   }`}
                 >
@@ -245,7 +245,7 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
               type="checkbox"
               checked={includeAi}
               onChange={(e) => setIncludeAi(e.target.checked)}
-              className="w-4 h-4 rounded accent-emerald-500 cursor-pointer"
+              className="w-4 h-4 rounded accent-purple-500 cursor-pointer"
             />
             <span>Include AI Risk Intelligence & Natural Language Explanation</span>
           </label>
@@ -279,9 +279,9 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
 
       {/* Real-time Scanning Progress Visualizer */}
       {scanning && (
-        <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-emerald-500/30 bg-emerald-500/[0.02] shadow-2xl flex flex-col gap-4 animate-fade-in">
+        <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-purple-500/30 bg-purple-500/[0.02] shadow-2xl flex flex-col gap-4 animate-fade-in">
           <h4 className="text-sm font-semibold text-white flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+            <div className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-ping" />
             <span>Risk Assessment in Progress</span>
           </h4>
           <div className="flex flex-col gap-3">
@@ -298,15 +298,15 @@ export const ScannerPage: React.FC<ScannerPageProps> = ({ onNavigate, onCertific
                 <div
                   key={s.step}
                   className={`flex items-center gap-3 text-xs md:text-sm transition-colors ${
-                    isDone ? 'text-emerald-400 font-medium' : isCurrent ? 'text-white font-medium' : 'text-slate-500'
+                    isDone ? 'text-purple-300 font-medium' : isCurrent ? 'text-white font-medium' : 'text-slate-500'
                   }`}
                 >
                   <div
                     className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all ${
                       isDone
-                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500'
+                        ? 'bg-purple-500/20 text-purple-300 border border-purple-500'
                         : isCurrent
-                        ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-400/80 animate-pulse'
+                        ? 'bg-purple-500/10 text-purple-200 border border-purple-400/80 animate-pulse'
                         : 'bg-white/[0.03] text-slate-500 border border-white/10'
                     }`}
                   >

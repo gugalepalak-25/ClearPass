@@ -54,10 +54,10 @@ export const SettingsPage: React.FC = () => {
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto">
       {/* Top Banner / Hero */}
       <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-[420px] h-[300px] bg-gradient-to-bl from-purple-500/15 via-emerald-500/10 to-transparent rounded-full blur-[100px] pointer-events-none -z-10 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute top-0 right-0 w-[420px] h-[300px] bg-gradient-to-bl from-purple-600/30 via-violet-600/20 to-transparent rounded-full blur-[100px] pointer-events-none -z-10 group-hover:opacity-100 transition-opacity" />
 
         <div className="max-w-3xl relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-semibold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4">
             <Settings className="w-3.5 h-3.5" />
             <span>Infrastructure & Protocol Config</span>
           </div>
@@ -67,7 +67,7 @@ export const SettingsPage: React.FC = () => {
             className="text-3xl md:text-5xl font-normal text-white tracking-tight leading-tight mb-3"
           >
             Protocol &{' '}
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-400 via-fuchsia-300 to-violet-300 bg-clip-text text-transparent">
               Network Settings
             </span>
           </h1>
@@ -85,7 +85,7 @@ export const SettingsPage: React.FC = () => {
         <div className="liquid-glass rounded-3xl p-6 md:p-7 border border-white/10 shadow-xl flex flex-col gap-5 relative overflow-hidden">
           <div className="flex items-center justify-between pb-3 border-b border-white/10">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
                 <Layers size={18} />
               </div>
               <div>
@@ -94,8 +94,8 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
 
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-purple-500/10 border border-purple-500/30 text-purple-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
               Online
             </span>
           </div>
@@ -103,7 +103,7 @@ export const SettingsPage: React.FC = () => {
           <div className="flex flex-col gap-3.5 text-xs">
             <div className="flex items-center justify-between p-3 rounded-xl liquid-glass border border-white/5 bg-white/[0.01]">
               <span className="text-slate-400">Network ID</span>
-              <span className="text-emerald-400 font-mono font-bold">testnet</span>
+              <span className="text-purple-300 font-mono font-bold">testnet</span>
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-xl liquid-glass border border-white/5 bg-white/[0.01]">
@@ -131,7 +131,7 @@ export const SettingsPage: React.FC = () => {
         <div className="liquid-glass rounded-3xl p-6 md:p-7 border border-white/10 shadow-xl flex flex-col gap-5 relative overflow-hidden">
           <div className="flex items-center justify-between pb-3 border-b border-white/10">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 border border-violet-500/30 flex items-center justify-center text-violet-400">
                 <Database size={18} />
               </div>
               <div>
@@ -150,7 +150,7 @@ export const SettingsPage: React.FC = () => {
                 href={`https://testnet.nearblocks.io/address/${contractInfo?.contractId || 'clearpass.testnet'}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-purple-400 font-mono font-bold hover:underline flex items-center gap-1.5"
+                className="text-purple-300 font-mono font-bold hover:underline flex items-center gap-1.5"
               >
                 <span>{contractInfo?.contractId || 'clearpass.testnet'}</span>
                 <ExternalLink size={12} />
@@ -164,7 +164,7 @@ export const SettingsPage: React.FC = () => {
 
             <div className="flex items-center justify-between p-3 rounded-xl liquid-glass border border-white/5 bg-white/[0.01]">
               <span className="text-slate-400">Storage Optimization</span>
-              <span className="text-emerald-400 font-semibold">Minimal zero-knowledge footprint</span>
+              <span className="text-purple-300 font-semibold">Minimal zero-knowledge footprint</span>
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-xl liquid-glass border border-white/5 bg-white/[0.01]">
@@ -179,7 +179,7 @@ export const SettingsPage: React.FC = () => {
       <div className="liquid-glass rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl flex flex-col gap-5 relative overflow-hidden">
         <div className="flex items-center justify-between pb-3 border-b border-white/10 flex-wrap gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
               <Key size={20} />
             </div>
             <div>
@@ -190,9 +190,9 @@ export const SettingsPage: React.FC = () => {
 
           <button
             onClick={handleCopyKey}
-            className="px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-white/80 hover:text-white hover:border-emerald-500/40 transition-all flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-white/80 hover:text-white hover:border-purple-500/40 transition-all flex items-center gap-2 cursor-pointer"
           >
-            {copiedKey ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+            {copiedKey ? <Check size={14} className="text-purple-300" /> : <Copy size={14} />}
             <span>{copiedKey ? 'Key Copied!' : 'Copy Public Key'}</span>
           </button>
         </div>
@@ -206,10 +206,10 @@ export const SettingsPage: React.FC = () => {
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between text-xs text-slate-400">
             <span className="font-mono">Issuer Public Key (SPKI PEM)</span>
-            <span className="font-mono text-emerald-400">Curve: ed25519 / RFC 8032</span>
+            <span className="font-mono text-purple-300">Curve: ed25519 / RFC 8032</span>
           </div>
 
-          <pre className="p-4 rounded-2xl liquid-glass border border-white/10 bg-black/60 font-mono text-xs text-emerald-300 overflow-x-auto select-all leading-relaxed">
+          <pre className="p-4 rounded-2xl liquid-glass border border-white/10 bg-black/60 font-mono text-xs text-purple-200 overflow-x-auto select-all leading-relaxed">
             {health?.issuerPublicKey || '-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA...\n-----END PUBLIC KEY-----'}
           </pre>
         </div>
