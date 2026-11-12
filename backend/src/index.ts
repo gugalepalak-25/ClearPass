@@ -367,7 +367,7 @@ export function buildServer() {
 }
 
 // Start server if executed directly
-if (process.argv[1] && process.argv[1].endsWith('index.ts') || process.argv[1]?.endsWith('index.js')) {
+if (process.env.VERCEL || process.argv[1]?.endsWith('index.ts') || process.argv[1]?.endsWith('index.js')) {
   const app = buildServer();
   app.listen({ port: config.port, host: config.host }, (err, address) => {
     if (err) {
