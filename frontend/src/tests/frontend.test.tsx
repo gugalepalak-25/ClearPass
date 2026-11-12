@@ -1,11 +1,17 @@
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from '../App.js';
 import { TrustNotice } from '../components/TrustNotice.js';
 import { StatCard } from '../components/StatCard.js';
 import { ErrorBoundary } from '../components/ErrorBoundary.js';
 import { Shield } from 'lucide-react';
+
+beforeAll(() => {
+  // Mock HTMLMediaElement.prototype.play for jsdom test environment
+  window.HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined);
+  window.HTMLMediaElement.prototype.pause = vi.fn();
+});
 
 describe('ClearPass Frontend Component Suite', () => {
   it('renders App root without crashing', () => {
@@ -16,8 +22,9 @@ describe('ClearPass Frontend Component Suite', () => {
 
   it('renders brand title and protocol slogan', () => {
     render(<App />);
-    const slogans = screen.getAllByText(/Privacy-Preserving Fund Risk Protocol/i);
+    const slogans = screen.getAllByText(/PRIVACY-PRESERVING FUND RISK VERIFICATION ON NEAR/i);
     expect(slogans.length).toBeGreaterThan(0);
+    expect(screen.getByText(/Prove your money is clean/i)).toBeTruthy();
   });
 
   it('renders TrustNotice with limited-scope assessment disclaimer', () => {
@@ -46,7 +53,7 @@ describe('ClearPass Frontend Component Suite', () => {
   it('switches navigation tabs when clicked', () => {
     render(<App />);
     // Select the navbar button specifically
-    const scannerTabButtons = screen.getAllByText('Risk Scanner');
+    const scannerTabButtons = screen.getAllByText('Scanner');
     fireEvent.click(scannerTabButtons[0]);
     expect(screen.getByText('Assessment Parameters')).toBeTruthy();
 
@@ -54,7 +61,7 @@ describe('ClearPass Frontend Component Suite', () => {
     fireEvent.click(certsTabButtons[0]);
     expect(screen.getByText('Verification Certificate Registry')).toBeTruthy();
 
-    const auditorTabButtons = screen.getAllByText('Auditor Portal');
+    const auditorTabButtons = screen.getAllByText('Auditor');
     fireEvent.click(auditorTabButtons[0]);
     expect(screen.getByText(/Auditor Portal & Selective Disclosure/i)).toBeTruthy();
   });

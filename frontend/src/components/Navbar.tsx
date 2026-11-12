@@ -1,38 +1,32 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
-  Shield,
-  Search,
-  Award,
-  Users,
-  Activity,
-  Settings,
+  Globe,
   Wallet,
   LogOut,
   Copy,
   Check,
   ChevronDown,
   Sparkles,
+  ExternalLink,
+  ShieldCheck,
 } from 'lucide-react';
 import { useNearWallet } from '../wallet/NearWalletContext.js';
 
 interface NavbarProps {
   activeTab: string;
   onSelectTab: (tab: string) => void;
+  onOpenDemo?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  activeTab,
+  onSelectTab,
+  onOpenDemo,
+}) => {
   const { accountId, isConnected, isSimulated, connect, disconnect, simulateAccount } = useNearWallet();
   const [copied, setCopied] = useState(false);
   const [showWalletMenu, setShowWalletMenu] = useState(false);
-
-  const navItems = [
-    { id: 'overview', label: 'Overview', icon: Shield },
-    { id: 'scanner', label: 'Risk Scanner', icon: Search },
-    { id: 'certificates', label: 'Certificates', icon: Award },
-    { id: 'auditor', label: 'Auditor Portal', icon: Users },
-    { id: 'activity', label: 'Activity', icon: Activity },
-    { id: 'settings', label: 'Settings', icon: Settings },
-  ];
 
   const handleCopy = () => {
     if (accountId) {
@@ -42,317 +36,192 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab }) => {
     }
   };
 
+  const navLinks = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'scanner', label: 'Scanner' },
+    { id: 'certificates', label: 'Certificates' },
+    { id: 'auditor', label: 'Auditor' },
+    { id: 'activity', label: 'Activity' },
+  ];
+
   return (
-    <header
-      style={{
-        background: 'rgba(5, 12, 9, 0.85)',
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid var(--border-subtle)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-      }}
+    <motion.nav
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="relative z-20 px-6 py-6 w-full"
     >
-      <div
-        style={{
-          maxWidth: '1280px',
-          margin: '0 auto',
-          padding: '12px 20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '12px',
-        }}
-      >
-        {/* Brand / Logo */}
-        <div
-          onClick={() => onSelectTab('overview')}
-          style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
-        >
+      <div className="liquid-glass rounded-full px-6 py-3 flex items-center justify-between max-w-5xl mx-auto shadow-2xl">
+        {/* Left side */}
+        <div className="flex items-center gap-8">
+          {/* Logo */}
           <div
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #10b981 0%, #064e3b 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ffffff',
-              boxShadow: '0 0 16px rgba(16, 185, 129, 0.25)',
-            }}
+            onClick={() => onSelectTab('landing')}
+            className="flex items-center gap-2 cursor-pointer group"
           >
-            <Shield size={22} />
-          </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#f0fdf4', letterSpacing: '-0.02em' }}>
-                ClearPass
-              </span>
-              <span className="badge badge-approved" style={{ fontSize: '0.65rem', padding: '2px 6px' }}>
-                NEAR
-              </span>
-            </div>
-            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-              Privacy-Preserving Fund Risk Protocol
+            <Globe className="w-6 h-6 text-white group-hover:rotate-12 transition-transform duration-300" />
+            <span className="text-white font-semibold text-lg tracking-tight">
+              ClearPass
             </span>
+            <span className="hidden sm:inline-block text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-white/80 border border-white/10">
+              NEAR Testnet
+            </span>
+          </div>
+
+          {/* Nav links */}
+          <div className="hidden md:flex items-center gap-8 text-white/80 text-sm font-medium">
+            {navLinks.map((link) => {
+              const isActive = activeTab === link.id;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => onSelectTab(link.id)}
+                  className={`relative cursor-pointer transition-colors duration-300 ${isActive ? 'text-white font-semibold' : 'hover:text-white'
+                    }`}
+                >
+                  {link.label}
+                  {isActive && (
+                    <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white rounded-full" />
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '4px', overflowX: 'auto', padding: '4px 0' }}>
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => onSelectTab(item.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '8px 14px',
-                  borderRadius: '8px',
-                  fontSize: '0.875rem',
-                  fontWeight: isActive ? 600 : 500,
-                  color: isActive ? '#34d399' : '#94a3b8',
-                  background: isActive ? 'rgba(16, 185, 129, 0.12)' : 'transparent',
-                  border: isActive ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid transparent',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                <Icon size={16} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Network & Wallet Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* Testnet Badge */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 10px',
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border-medium)',
-              borderRadius: '8px',
-              fontSize: '0.75rem',
-              color: '#94a3b8',
-            }}
+        {/* Right side */}
+        <div className="flex items-center gap-4 relative">
+          {/* Demo walkthrough / quick guide */}
+          <button
+            onClick={() => (onOpenDemo ? onOpenDemo() : onSelectTab('landing'))}
+            className="text-white hover:text-white/80 transition-colors text-sm font-medium cursor-pointer hidden sm:block"
           >
-            <span
-              style={{
-                width: '7px',
-                height: '7px',
-                borderRadius: '50%',
-                background: '#10b981',
-                boxShadow: '0 0 8px #10b981',
-              }}
-            />
-            <span>Testnet</span>
-          </div>
+            Video Demo
+          </button>
 
-          {/* Wallet Connection */}
-          {isConnected && accountId ? (
-            <div style={{ position: 'relative' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  background: 'var(--bg-card)',
-                  border: '1px solid var(--border-medium)',
-                  borderRadius: '10px',
-                  padding: '4px 8px 4px 12px',
-                  gap: '8px',
-                }}
-              >
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#f0fdf4' }}>
-                    {accountId.length > 20 ? `${accountId.slice(0, 8)}...${accountId.slice(-6)}` : accountId}
-                  </span>
-                  {isSimulated && (
-                    <span style={{ fontSize: '0.65rem', color: '#f59e0b', fontWeight: 500 }}>
-                      Demo Mode
-                    </span>
-                  )}
-                </div>
-
-                <button
-                  onClick={handleCopy}
-                  title="Copy account ID"
-                  style={{
-                    background: 'transparent',
-                    color: '#94a3b8',
-                    padding: '4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  {copied ? <Check size={14} color="#10b981" /> : <Copy size={14} />}
-                </button>
-
-                <button
-                  onClick={() => disconnect()}
-                  title="Disconnect wallet"
-                  style={{
-                    background: 'rgba(239, 68, 68, 0.1)',
-                    color: '#ef4444',
-                    padding: '5px',
-                    borderRadius: '6px',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <LogOut size={14} />
-                </button>
-              </div>
-            </div>
+          {/* Wallet / Login Action */}
+          {!isConnected ? (
+            <button
+              onClick={() => connect()}
+              className="rounded-full px-5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 hover:shadow-[0_0_24px_rgba(168,85,247,0.55)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2 shadow-lg border border-white/20"
+            >
+              <Wallet className="w-4 h-4 stroke-[2.5]" />
+              <span>Connect Wallet</span>
+            </button>
           ) : (
-            <div style={{ position: 'relative' }}>
+            <div className="relative">
               <button
                 onClick={() => setShowWalletMenu(!showWalletMenu)}
-                className="btn btn-primary"
-                style={{ fontSize: '0.82rem', padding: '8px 14px' }}
+                className="liquid-glass rounded-full px-4 py-1.5 text-sm font-medium text-white hover:border-purple-500/40 hover:shadow-[0_0_15px_rgba(168,85,247,0.25)] transition-all cursor-pointer flex items-center gap-2"
               >
-                <Wallet size={16} />
-                <span>Connect Wallet</span>
-                <ChevronDown size={14} />
+                <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_#c084fc]" />
+                <span className="font-mono text-xs max-w-[130px] truncate text-purple-300">
+                  {accountId}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-white/60" />
               </button>
 
-              {showWalletMenu && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    right: 0,
-                    top: '115%',
-                    width: '260px',
-                    background: 'var(--bg-card)',
-                    border: '1px solid var(--border-medium)',
-                    borderRadius: '10px',
-                    padding: '8px',
-                    boxShadow: '0 12px 28px rgba(0,0,0,0.6)',
-                    zIndex: 60,
-                  }}
-                >
-                  <div style={{ padding: '6px 10px', fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>
-                    Select Connection
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setShowWalletMenu(false);
-                      connect();
-                    }}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '8px 10px',
-                      borderRadius: '6px',
-                      background: 'transparent',
-                      color: '#f0fdf4',
-                      fontSize: '0.85rem',
-                      textAlign: 'left',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              <AnimatePresence>
+                {showWalletMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-64 rounded-2xl p-3 bg-black/90 border border-white/15 backdrop-blur-2xl shadow-2xl z-50 text-xs text-white"
                   >
-                    <Wallet size={16} color="#10b981" />
-                    <span>NEAR Wallet Selector</span>
-                  </button>
+                    <div className="p-2 border-b border-white/10 mb-2">
+                      <div className="text-white/50 text-[10px] uppercase tracking-wider mb-1">
+                        Connected Account
+                      </div>
+                      <div className="font-mono text-white text-xs truncate mb-2">
+                        {accountId}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={handleCopy}
+                          className="flex items-center gap-1 px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-white/90 text-[11px]"
+                        >
+                          {copied ? <Check className="w-3 h-3 text-purple-400" /> : <Copy className="w-3 h-3" />}
+                          <span>{copied ? 'Copied' : 'Copy'}</span>
+                        </button>
+                        <a
+                          href={`https://testnet.nearblocks.io/address/${accountId}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-white/90 text-[11px]"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          <span>Explorer</span>
+                        </a>
+                      </div>
+                    </div>
 
-                  <div style={{ borderTop: '1px solid var(--border-subtle)', margin: '6px 0' }} />
+                    {/* Quick Demo Accounts */}
+                    <div className="p-2 border-b border-white/10 mb-2">
+                      <button
+                        onClick={() => {
+                          setShowWalletMenu(false);
+                          connect();
+                        }}
+                        className="w-full flex items-center gap-2 px-2 py-1.5 rounded bg-white/10 hover:bg-white/15 text-white text-[11px] font-medium transition-colors mb-2"
+                      >
+                        <Wallet className="w-3.5 h-3.5 text-purple-400" />
+                        <span>Connect Another Wallet / Address</span>
+                      </button>
 
-                  <div style={{ padding: '6px 10px', fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>
-                    Instant Demo Accounts
-                  </div>
+                      <div className="text-white/50 text-[10px] uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-purple-400" />
+                        <span>Demo Test Profiles</span>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <button
+                          onClick={() => {
+                            simulateAccount('clean-merchant.testnet');
+                            setShowWalletMenu(false);
+                          }}
+                          className="text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] text-purple-300"
+                        >
+                          clean-merchant.testnet (Clean)
+                        </button>
+                        <button
+                          onClick={() => {
+                            simulateAccount('scammer-sybil.testnet');
+                            setShowWalletMenu(false);
+                          }}
+                          className="text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] text-rose-300"
+                        >
+                          scammer-sybil.testnet (Flagged)
+                        </button>
+                        <button
+                          onClick={() => {
+                            simulateAccount('fresh-user.testnet');
+                            setShowWalletMenu(false);
+                          }}
+                          className="text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] text-amber-300"
+                        >
+                          fresh-user.testnet (Inconclusive)
+                        </button>
+                      </div>
+                    </div>
 
-                  <button
-                    onClick={() => {
-                      setShowWalletMenu(false);
-                      simulateAccount('alice-clean-demo.testnet');
-                    }}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '8px 10px',
-                      borderRadius: '6px',
-                      background: 'transparent',
-                      color: '#34d399',
-                      fontSize: '0.82rem',
-                      textAlign: 'left',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                  >
-                    <Sparkles size={14} />
-                    <span>Alice (Low-Risk Demo)</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setShowWalletMenu(false);
-                      simulateAccount('charlie-compromised-demo.testnet');
-                    }}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '8px 10px',
-                      borderRadius: '6px',
-                      background: 'transparent',
-                      color: '#f87171',
-                      fontSize: '0.82rem',
-                      textAlign: 'left',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                  >
-                    <Sparkles size={14} />
-                    <span>Charlie (Flagged Demo)</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setShowWalletMenu(false);
-                      simulateAccount('unknown-dormant-demo.testnet');
-                    }}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '8px 10px',
-                      borderRadius: '6px',
-                      background: 'transparent',
-                      color: '#fbbf24',
-                      fontSize: '0.82rem',
-                      textAlign: 'left',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                  >
-                    <Sparkles size={14} />
-                    <span>Dormant (Inconclusive Demo)</span>
-                  </button>
-                </div>
-              )}
+                    <button
+                      onClick={() => {
+                        disconnect();
+                        setShowWalletMenu(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-2 py-1.5 rounded text-rose-400 hover:bg-rose-500/10 text-left transition-colors"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Disconnect Wallet</span>
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
         </div>
       </div>
-    </header>
+    </motion.nav>
   );
 };
-

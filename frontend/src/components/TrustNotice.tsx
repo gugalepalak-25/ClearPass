@@ -1,33 +1,24 @@
 import React from 'react';
-import { ShieldCheck, Info } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export const TrustNotice: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
   return (
     <div
-      style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '12px',
-        padding: compact ? '10px 14px' : '14px 18px',
-        background: 'rgba(16, 185, 129, 0.05)',
-        border: '1px solid rgba(16, 185, 129, 0.2)',
-        borderRadius: '10px',
-        fontSize: '0.85rem',
-        color: '#cbd5e1',
-        lineHeight: 1.45,
-        margin: '12px 0 20px',
-      }}
+      className={`liquid-glass rounded-2xl flex items-start gap-3.5 border border-purple-500/30 bg-purple-500/[0.04] backdrop-blur-xl shadow-[0_0_20px_rgba(168,85,247,0.12)] ${
+        compact ? 'p-3 text-xs' : 'p-4 md:p-5 text-sm my-2 mb-6'
+      }`}
     >
-      <div style={{ color: '#34d399', flexShrink: 0, marginTop: '2px' }}>
+      <div className="text-purple-400 shrink-0 mt-0.5 p-1 rounded-lg bg-purple-500/15 border border-purple-500/25">
         <ShieldCheck size={compact ? 16 : 18} />
       </div>
-      <div>
-        <strong style={{ color: '#f0fdf4', display: 'block', marginBottom: '2px' }}>
+      <div className="leading-relaxed">
+        <strong className="text-white block font-semibold mb-1 tracking-wide">
           Limited-Scope Assessment Notice
         </strong>
-        ClearPass validates that the evaluated account passed a defined risk scope (up to 3 transaction hops against known watchlist version). It does not certify that any wallet or funds are absolutely clean or perpetually compliant.
+        <span className="text-slate-400">
+          ClearPass validates that the evaluated account passed a defined risk scope (up to 3 transaction hops against known watchlist version). It does not certify that any wallet or funds are absolutely clean or perpetually compliant.
+        </span>
       </div>
     </div>
   );
 };
-

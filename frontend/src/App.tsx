@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { NearWalletProvider } from './wallet/NearWalletContext.js';
+import { NearWalletProvider, useNearWallet } from './wallet/NearWalletContext.js';
 import { ErrorBoundary } from './components/ErrorBoundary.js';
 import { Navbar } from './components/Navbar.js';
+import { Hero } from './components/Hero.js';
+import { BackgroundVideo } from './components/BackgroundVideo.js';
+import { VideoDemoModal } from './components/VideoDemoModal.js';
+import { ConnectWalletModal } from './components/ConnectWalletModal.js';
 import { OverviewPage } from './pages/OverviewPage.js';
 import { ScannerPage } from './pages/ScannerPage.js';
 import { CertificatesPage } from './pages/CertificatesPage.js';
@@ -10,9 +14,12 @@ import { ActivityPage } from './pages/ActivityPage.js';
 import { SettingsPage } from './pages/SettingsPage.js';
 import { VerificationCertificate } from './types/index.js';
 
-export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('overview');
+const AppContent: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<string>('landing');
   const [selectedShareCertId, setSelectedShareCertId] = useState<string>('');
+  const [targetScanAccount, setTargetScanAccount] = useState<string>('');
+  const [showDemoModal, setShowDemoModal] = useState<boolean>(false);
+  const { isWalletModalOpen, closeWalletModal } = useNearWallet();
 
   const handleNavigateToShare = (certId: string) => {
     setSelectedShareCertId(certId);
@@ -24,58 +31,78 @@ export const App: React.FC = () => {
   };
 
   return (
+    <main className="relative bg-black h-screen w-screen flex flex-col overflow-hidden selection:bg-white selection:text-black shrink-0">
+      {/* Background Video using Mux HLS stream */}
+      <BackgroundVideo />
+
+      {/* Navigation Bar */}
+      <Navbar
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        onOpenDemo={() => setShowDemoModal(true)}
+      />
+
+      {/* Body Content */}
+      {activeTab === 'landing' ? (
+        <Hero
+          onStartScan={(account) => {
+            if (account) setTargetScanAccount(account);
+            setActiveTab('scanner');
+          }}
+          onOpenDemoVideo={() => setShowDemoModal(true)}
+          onNavigateTab={(tab) => setActiveTab(tab)}
+        />
+      ) : (
+        <div className="relative z-10 flex-1 overflow-y-auto px-4 md:px-8 py-6 w-full max-w-7xl mx-auto">
+          <ErrorBoundary fallbackTitle={`Error rendering ${activeTab} view`}>
+            {activeTab === 'overview' && <OverviewPage onNavigate={setActiveTab} />}
+            {activeTab === 'scanner' && (
+              <ScannerPage
+                initialAccount={targetScanAccount}
+                onNavigate={setActiveTab}
+                onCertificateIssued={handleCertificateIssued}
+              />
+            )}
+            {activeTab === 'certificates' && (
+              <CertificatesPage
+                onNavigate={setActiveTab}
+                onSelectShareCertificate={handleNavigateToShare}
+              />
+            )}
+            {activeTab === 'auditor' && <AuditorPage initialCertId={selectedShareCertId} />}
+            {activeTab === 'activity' && <ActivityPage />}
+            {activeTab === 'settings' && <SettingsPage />}
+          </ErrorBoundary>
+        </div>
+      )}
+
+      {/* Video Demo & Protocol Walkthrough Modal */}
+      <VideoDemoModal
+        isOpen={showDemoModal}
+        onClose={() => setShowDemoModal(false)}
+        onLaunchScanner={() => {
+          setShowDemoModal(false);
+          setActiveTab('scanner');
+        }}
+      />
+
+      {/* Connect Any NEAR Wallet Modal */}
+      <ConnectWalletModal
+        isOpen={isWalletModalOpen}
+        onClose={closeWalletModal}
+      />
+    </main>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
     <ErrorBoundary fallbackTitle="ClearPass Global Application Error">
       <NearWalletProvider>
-        <div className="app-container">
-          <Navbar activeTab={activeTab} onSelectTab={setActiveTab} />
-
-          <main className="main-content">
-            <ErrorBoundary fallbackTitle={`Error rendering ${activeTab} view`}>
-              {activeTab === 'overview' && <OverviewPage onNavigate={setActiveTab} />}
-              {activeTab === 'scanner' && (
-                <ScannerPage
-                  onNavigate={setActiveTab}
-                  onCertificateIssued={handleCertificateIssued}
-                />
-              )}
-              {activeTab === 'certificates' && (
-                <CertificatesPage
-                  onNavigate={setActiveTab}
-                  onSelectShareCertificate={handleNavigateToShare}
-                />
-              )}
-              {activeTab === 'auditor' && <AuditorPage initialCertId={selectedShareCertId} />}
-              {activeTab === 'activity' && <ActivityPage />}
-              {activeTab === 'settings' && <SettingsPage />}
-            </ErrorBoundary>
-          </main>
-
-          <footer
-            style={{
-              borderTop: '1px solid var(--border-subtle)',
-              padding: '24px 20px',
-              textAlign: 'center',
-              fontSize: '0.8rem',
-              color: '#64748b',
-              background: 'var(--bg-primary)',
-            }}
-          >
-            <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-              <div>
-                <strong style={{ color: '#f0fdf4' }}>ClearPass Protocol</strong> — Privacy-Preserving Fund Risk Verification on NEAR
-              </div>
-              <div style={{ display: 'flex', gap: '16px' }}>
-                <span style={{ color: '#34d399' }}>NEAR Testnet</span>
-                <span>Deterministic Rules Engine</span>
-                <span>Ed25519 Cryptographic Proof</span>
-              </div>
-            </div>
-          </footer>
-        </div>
+        <AppContent />
       </NearWalletProvider>
     </ErrorBoundary>
   );
 };
 
 export default App;
-

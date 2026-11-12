@@ -11,13 +11,22 @@
   },
   "dependencies": {
     "@near-wallet-selector/core": "^8.9.15",
+    "@near-wallet-selector/here-wallet": "^10.1.4",
+    "@near-wallet-selector/ledger": "^10.1.4",
+    "@near-wallet-selector/meteor-wallet": "^10.1.4",
     "@near-wallet-selector/modal-ui": "^8.9.15",
     "@near-wallet-selector/my-near-wallet": "^8.9.15",
+    "@near-wallet-selector/nightly": "^10.1.4",
+    "@near-wallet-selector/sender": "^10.1.4",
+    "@tailwindcss/vite": "^4.3.5",
     "buffer": "^6.0.3",
+    "hls.js": "^1.7.4",
     "lucide-react": "^0.441.0",
+    "motion": "^14.12.0",
     "near-api-js": "^4.0.2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
     "@testing-library/react": "^16.0.1",
