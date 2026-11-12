@@ -43,3 +43,10 @@ yarn-error.log*
 Thumbs.db
 clearpass.zip
 _zip_export_temp/
+
+node_modules/
+.env
+.keys/
+target/
+.wakatime.cfg
+.vscode/

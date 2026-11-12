@@ -1,6 +1,6 @@
-import { config } from '../config.js';
 import { NormalizedTransaction, AssessmentScope } from '../types/index.js';
 import { getScenarioById, loadRiskData } from './flagged-data.js';
+import { fetchNearBlocksHistory, scanNetwork, scanRpcUrl } from './real-data.js';
 
 export interface WalletRpcData {
   accountExists: boolean;
@@ -82,9 +82,9 @@ export async function fetchWalletHistory(
     };
   }
 
-  // 2. Query Live NEAR Testnet RPC
+  // 2. Query the live NEAR network the wallet lives on (SCAN_NETWORK, default mainnet)
   try {
-    const rpcResponse = await fetch(config.nearRpcUrl, {
+    const rpcResponse = await fetch(scanRpcUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -116,7 +116,7 @@ export async function fetchWalletHistory(
         },
         liveRpcQueried: true,
         rpcLatencyMs: latency,
-        note: `NEAR RPC query returned HTTP status ${rpcResponse.status}. Account could not be verified on ${config.nearNetwork}.`,
+        note: `NEAR RPC query returned HTTP status ${rpcResponse.status}. Account could not be verified on ${scanNetwork}.`,
       };
     }
 
@@ -138,7 +138,7 @@ export async function fetchWalletHistory(
         },
         liveRpcQueried: true,
         rpcLatencyMs: latency,
-        note: `Account '${normalizedAccount}' does not exist on NEAR ${config.nearNetwork} or has been deleted.`,
+        note: `Account '${normalizedAccount}' does not exist on NEAR ${scanNetwork} or has been deleted.`,
       };
     }
 
@@ -148,43 +148,27 @@ export async function fetchWalletHistory(
     const nearBalance = (Number(BigInt(rawBalance) / 10n ** 20n) / 10000).toFixed(4);
     const storageUsage = data.result?.storage_usage || 0;
 
-    // Next, attempt to fetch recent transactions from NEAR testnet public indexer endpoints
-    let liveTxs: NormalizedTransaction[] = [];
-    let completeness: 'COMPLETE' | 'PARTIAL' | 'INSUFFICIENT' = 'PARTIAL';
-
-    try {
-      // Try fastnear / nearblocks public testnet API if accessible
-      const indexerRes = await fetch(`https://testnet-api.fastnear.com/v1/account/${normalizedAccount}/full`, {
-        signal: AbortSignal.timeout(3500),
-      });
-      if (indexerRes.ok) {
-        const indexData = (await indexerRes.json()) as any;
-        if (Array.isArray(indexData?.tokens)) {
-          completeness = 'COMPLETE';
-        }
-      }
-    } catch {
-      // Indexer timeout or not responding; gracefully fall back with transparent notice
-      completeness = 'PARTIAL';
-    }
+    // Real transfer history from NearBlocks (NEAR RPC can't list past transactions).
+    // An existing account with NO readable history is INSUFFICIENT, never an automatic approval.
+    const history = await fetchNearBlocksHistory(normalizedAccount, hopDepth);
 
     return {
       accountExists: true,
       balanceNear: nearBalance,
       storageUsage,
-      transactions: liveTxs,
+      transactions: history.transactions,
       scope: {
         nativeNear: true,
         nep141Tokens: true,
         maxHopDepth: hopDepth,
-        evaluatedTxCount: liveTxs.length,
+        evaluatedTxCount: history.transactions.length,
         timeWindowDays: 90,
         dataSource: 'near_rpc',
-        dataCompleteness: liveTxs.length > 0 ? completeness : 'PARTIAL',
+        dataCompleteness: history.completeness,
       },
       liveRpcQueried: true,
-      rpcLatencyMs: latency,
-      note: `Verified live on NEAR ${config.nearNetwork} RPC. Balance: ${nearBalance} NEAR. (Historical indexer depth: ${completeness}).`,
+      rpcLatencyMs: Date.now() - startTime,
+      note: `Verified live on NEAR ${scanNetwork}. Balance: ${nearBalance} NEAR. ${history.note}`,
     };
   } catch (err: any) {
     const latency = Date.now() - startTime;

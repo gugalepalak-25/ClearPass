@@ -27,19 +27,24 @@ Requirements:
 3. Detail what an external auditor or DeFi protocol can verify using the cryptographic certificate.
 Keep tone objective, precise, and professional.`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    // NEAR AI Cloud by default (OpenAI-compatible). Attested models run in secure hardware (TEE).
+    // Override with AI_BASE_URL / AI_MODEL in .env.
+    const baseUrl = (process.env.AI_BASE_URL || 'https://cloud-api.near.ai/v1').replace(/\/+$/, '');
+    const model = process.env.AI_MODEL || 'z-ai/glm-5.3-flash';
+
+    const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${config.aiApiKey}`,
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model,
         messages: [{ role: 'user', content: prompt }],
-        max_tokens: 350,
+        max_tokens: 900, // room for models that reason before answering
         temperature: 0.2,
       }),
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(Number(process.env.AI_TIMEOUT_MS || 20000)),
     });
 
     if (response.ok) {
@@ -48,9 +53,14 @@ Keep tone objective, precise, and professional.`;
       if (text) {
         return text;
       }
+      console.warn(`[AI Explainer] ${model} returned an empty answer. Falling back to deterministic explainer.`);
+    } else {
+      // Logs the status and error message only, never the key.
+      const body = (await response.text().catch(() => '')).slice(0, 300);
+      console.warn(`[AI Explainer] ${baseUrl} returned HTTP ${response.status} for ${model}: ${body}`);
     }
-  } catch (err) {
-    console.warn('[AI Explainer] Remote LLM request failed or timed out. Falling back to deterministic explainer.');
+  } catch (err: any) {
+    console.warn(`[AI Explainer] Remote LLM request failed or timed out (${err?.name || 'error'}). Falling back to deterministic explainer.`);
   }
 
   return generateDeterministicAiFallback(assessment);
@@ -89,6 +99,6 @@ Account **${walletAddress}** yielded an outcome of **INCONCLUSIVE** with an inde
 ClearPass strictly adheres to the principle that an inconclusive result must never be treated as an approval. When historical data is insufficient or absent, the protocol withholds clean certification rather than making unverified assumptions.
 
 ### Next Steps for Verification
-To achieve a conclusive result, ensure the wallet has recorded on-chain transactions on NEAR Testnet or retry when indexer synchronization has completed.`;
+To achieve a conclusive result, ensure the wallet has recorded on-chain transactions on NEAR or retry when indexer synchronization has completed.`;
 }
 

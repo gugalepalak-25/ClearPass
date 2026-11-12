@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import { AssessmentResult, RiskFinding, RiskOutcome, AssessmentScope } from '../types/index.js';
 import { loadRiskData, findFlaggedEntity } from './flagged-data.js';
 import { fetchWalletHistory } from './near-rpc.js';
+import { watchToken, loadEllipticBlocklist } from './real-data.js';
 
 export async function assessWalletRisk(
   walletAddress: string,
@@ -12,6 +13,9 @@ export async function assessWalletRisk(
   const normalizedAddress = walletAddress.toLowerCase().trim();
   const clampedHopDepth = Math.max(1, Math.min(3, hopDepth));
   const riskData = loadRiskData();
+  const elliptic = loadEllipticBlocklist();
+  // The version that goes into certificates names BOTH lists, so a pass shows exactly what it was checked against.
+  const riskListVersion = elliptic ? `${riskData.version}+elliptic-${elliptic.version}` : riskData.version;
 
   // 1. Fetch wallet data (via NEAR RPC or labelled Demo Scenario)
   const rpcData = await fetchWalletHistory(normalizedAddress, clampedHopDepth, scenarioOverride);
@@ -72,13 +76,29 @@ export async function assessWalletRisk(
       depth: hop,
     });
 
+    // Multi-hop history from NearBlocks says which account the money passed through ("via").
+    const via = (tx as unknown as { via?: string }).via;
     graphEdges.push({
       from: tx.direction === 'OUT' ? normalizedAddress : counterparty,
-      to: tx.direction === 'OUT' ? counterparty : normalizedAddress,
+      to: tx.direction === 'OUT' ? counterparty : (via || normalizedAddress),
       amount: tx.amountNear,
       token: tx.token,
       direction: tx.direction,
     });
+
+    // Token whose launch matches Elliptic's description of the Nov 2026 NEAR memecoin laundering.
+    const wt = watchToken((tx as unknown as { tokenContract?: string }).tokenContract);
+    if (wt && !findings.some((f) => f.code === 'WATCHLISTED_TOKEN' && f.involvedAddress === wt.contract)) {
+      findings.push({
+        code: 'WATCHLISTED_TOKEN',
+        title: `Watch-listed token: ${wt.symbol}`,
+        description: `Received ${wt.symbol} (${wt.contract}) at hop ${hop}, a token whose launch matches Elliptic's report on the Nov 2026 NEAR memecoin laundering. This is a pattern match, not proof.`,
+        severity: 'MEDIUM',
+        hopDistance: hop,
+        involvedAddress: wt.contract,
+        penaltyPoints: 0,
+      });
+    }
 
     if (flaggedCounterparty) {
       let penalty = 0;
@@ -106,8 +126,13 @@ export async function assessWalletRisk(
   }
 
   // 4. Deterministic Outcome Evaluation
+  // Rule 0: The wallet itself is on a risk list -> rejected, whatever its history looks like
+  if (directFlag) {
+    outcome = 'REJECTED';
+    calculatedScore = Math.min(100, Math.max(calculatedScore, 75));
+  }
   // Rule A: Insufficient data or account not found
-  if (rpcData.scope.dataCompleteness === 'INSUFFICIENT' || !rpcData.accountExists) {
+  else if (rpcData.scope.dataCompleteness === 'INSUFFICIENT' || !rpcData.accountExists) {
     outcome = 'INCONCLUSIVE';
     calculatedScore = Math.max(calculatedScore, 48); // Moderate inconclusive baseline
     findings.push({
@@ -124,6 +149,11 @@ export async function assessWalletRisk(
     outcome = 'REJECTED';
     calculatedScore = Math.min(100, Math.max(calculatedScore, 75));
   }
+  // Rule B2: Watch-listed token seen -> needs a human look; never an automatic approval
+  else if (findings.some((f) => f.code === 'WATCHLISTED_TOKEN')) {
+    outcome = 'INCONCLUSIVE';
+    calculatedScore = Math.max(calculatedScore, 48);
+  }
   // Rule C: Clean assessment within defined scope
   else {
     outcome = 'APPROVED';
@@ -131,7 +161,7 @@ export async function assessWalletRisk(
   }
 
   // 5. Generate deterministic explanation
-  const summaryExplanation = generateDeterministicSummary(outcome, calculatedScore, findings, rpcData.scope, riskData.version);
+  const summaryExplanation = generateDeterministicSummary(outcome, calculatedScore, findings, rpcData.scope, riskListVersion);
 
   return {
     scanId,
@@ -141,7 +171,7 @@ export async function assessWalletRisk(
     riskScore: calculatedScore,
     assessmentTimestamp: new Date().toISOString(),
     scope: rpcData.scope,
-    riskListVersion: riskData.version,
+    riskListVersion,
     findings,
     summaryExplanation,
     normalizedGraph: {
@@ -167,5 +197,8 @@ function generateDeterministicSummary(
     return `Assessment REJECTED (Risk Score: ${score}/100). Identified significant risk indicators within ${scope.maxHopDepth} hops: ${topFinding ? topFinding.title : 'High-risk interaction identified'}. Evaluated against risk list ${riskListVersion}. The observed exposure exceeds protocol risk tolerance thresholds.`;
   }
 
-  return `Assessment INCONCLUSIVE (Risk Score: ${score}/100). Insufficient verifiable blockchain transaction data is available for this wallet on NEAR Testnet to establish a conclusive provenance trail within the configured ${scope.maxHopDepth}-hop window. In accordance with protocol safety specifications, an inconclusive assessment is never treated as an approval.`;
+  if (findings.some((f) => f.code === 'WATCHLISTED_TOKEN')) {
+    return `Assessment INCONCLUSIVE (Risk Score: ${score}/100). No address on risk list ${riskListVersion} was found within ${scope.maxHopDepth} hops, but the wallet received a watch-listed token linked by public reporting to the Nov 2026 NEAR memecoin laundering. A human should review it. An inconclusive assessment is never treated as an approval.`;
+  }
+  return `Assessment INCONCLUSIVE (Risk Score: ${score}/100). Insufficient verifiable blockchain transaction data is available for this wallet to establish a conclusive provenance trail within the configured ${scope.maxHopDepth}-hop window. In accordance with protocol safety specifications, an inconclusive assessment is never treated as an approval.`;
 }
