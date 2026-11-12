@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import { config } from '../config.js';
 import { FlaggedRiskData, FlaggedEntity, DemoScenario } from '../types/index.js';
+import { ellipticEntity, normalizeAddress } from './real-data.js';
 
 let cachedRiskData: FlaggedRiskData | null = null;
 
@@ -112,9 +113,13 @@ export function loadRiskData(): FlaggedRiskData {
 }
 
 export function findFlaggedEntity(address: string): FlaggedEntity | undefined {
+  // 1. Demo entities (fictional, for the demo scenarios)
   const data = loadRiskData();
-  const normalized = address.toLowerCase().trim();
-  return data.entities.find((e) => e.address.toLowerCase().trim() === normalized);
+  const normalized = normalizeAddress(address);
+  const demo = data.entities.find((e) => normalizeAddress(e.address) === normalized);
+  if (demo) return demo;
+  // 2. Elliptic's real Binance-hack blocklist (case rules: 0x lowercase, everything else exact)
+  return ellipticEntity(address);
 }
 
 export function getDemoScenarios(): Record<string, DemoScenario> {

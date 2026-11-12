@@ -1,0 +1,12 @@
+{
+  "_note": "Tokens whose launch matches Elliptic's description of the Nov 2026 NEAR memecoin laundering (same tickers, created in the same order and on the same days, on one launchpad). This is a MATCH ON PUBLIC FACTS, NOT a confirmed attribution: Elliptic did not publish contract addresses. Receiving or trading these tokens is a warning pattern (needs review), not a blocklist hit. Copycat tokens with the same tickers were launched on other launchpads after the report (Nov 9-10) and are NOT listed here.",
+  "source": "https://www.elliptic.co/insights/north-korea-meme-coins-binance-hack/",
+  "tokens": [
+    { "contract": "fuk-3.smithii.near",   "symbol": "FUK",   "created": "2026-11-05T00:25Z", "elliptic_created": "2026-11-05" },
+    { "contract": "olccl-4.smithii.near", "symbol": "OLCCL", "created": "2026-11-06T07:19Z", "elliptic_created": "2026-11-06" },
+    { "contract": "meili-5.smithii.near", "symbol": "MEILI", "created": "2026-11-06T08:35Z", "elliptic_created": "2026-11-06" },
+    { "contract": "mmli-6.smithii.near",  "symbol": "MMLI",  "created": "unverified",        "elliptic_created": "2026-11-06" },
+    { "contract": "dabi-7.smithii.near",  "symbol": "DABI",  "created": "2026-11-06T14:27Z", "elliptic_created": "2026-11-06" },
+    { "contract": "sinu-8.smithii.near",  "symbol": "SINU",  "created": "2026-11-07T10:06Z", "elliptic_created": "2026-11-07" }
+  ]
+}
