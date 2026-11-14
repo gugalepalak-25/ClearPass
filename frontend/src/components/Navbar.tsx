@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Globe,
@@ -24,9 +24,29 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectTab,
   onOpenDemo,
 }) => {
-  const { accountId, isConnected, isSimulated, connect, disconnect, simulateAccount } = useNearWallet();
+  const { accountId, isConnected, isSimulated, connect, disconnect, simulateAccount, networkId } =
+    useNearWallet();
   const [copied, setCopied] = useState(false);
   const [showWalletMenu, setShowWalletMenu] = useState(false);
+  const walletMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (walletMenuRef.current && !walletMenuRef.current.contains(event.target as Node)) {
+        setShowWalletMenu(false);
+      }
+    };
+
+    if (showWalletMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [showWalletMenu]);
 
   const handleCopy = () => {
     if (accountId) {
@@ -49,9 +69,9 @@ export const Navbar: React.FC<NavbarProps> = ({
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative z-20 px-6 py-6 w-full"
+      className="relative z-30 px-6 py-6 w-full"
     >
-      <div className="liquid-glass rounded-full px-6 py-3 flex items-center justify-between max-w-5xl mx-auto shadow-2xl">
+      <div className="liquid-glass overflow-visible rounded-full px-6 py-3 flex items-center justify-between max-w-5xl mx-auto shadow-2xl relative z-30">
         {/* Left side */}
         <div className="flex items-center gap-8">
           {/* Logo */}
@@ -76,8 +96,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={link.id}
                   onClick={() => onSelectTab(link.id)}
-                  className={`relative cursor-pointer transition-colors duration-300 ${isActive ? 'text-white font-semibold' : 'hover:text-white'
-                    }`}
+                  className={`relative cursor-pointer transition-colors duration-300 ${
+                    isActive ? 'text-white font-semibold' : 'hover:text-white'
+                  }`}
                 >
                   {link.label}
                   {isActive && (
@@ -109,47 +130,65 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>Connect Wallet</span>
             </button>
           ) : (
-            <div className="relative">
+            <div className="relative" ref={walletMenuRef}>
               <button
-                onClick={() => setShowWalletMenu(!showWalletMenu)}
-                className="liquid-glass rounded-full px-4 py-1.5 text-sm font-medium text-white hover:border-purple-500/40 hover:shadow-[0_0_15px_rgba(168,85,247,0.25)] transition-all cursor-pointer flex items-center gap-2"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowWalletMenu((prev) => !prev);
+                }}
+                className="liquid-glass rounded-full px-4 py-2 text-sm font-medium text-white hover:border-purple-500/40 hover:shadow-[0_0_15px_rgba(168,85,247,0.25)] transition-all cursor-pointer flex items-center gap-2 select-none"
               >
-                <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_#c084fc]" />
+                <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_#c084fc] shrink-0" />
                 <span className="font-mono text-xs max-w-[130px] truncate text-purple-300">
                   {accountId}
                 </span>
-                <ChevronDown className="w-3.5 h-3.5 text-white/60" />
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-white/70 transition-transform duration-200 shrink-0 ${
+                    showWalletMenu ? 'rotate-180 text-purple-300' : ''
+                  }`}
+                />
               </button>
 
               <AnimatePresence>
                 {showWalletMenu && (
                   <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                    initial={{ opacity: 0, y: -6, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-64 rounded-2xl p-3 bg-black/90 border border-white/15 backdrop-blur-2xl shadow-2xl z-50 text-xs text-white"
+                    exit={{ opacity: 0, y: -6, scale: 0.96 }}
+                    transition={{ duration: 0.15, ease: 'easeOut' }}
+                    className="absolute right-0 top-full mt-2.5 w-72 rounded-2xl p-3.5 bg-slate-950/95 border border-purple-500/40 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_30px_rgba(168,85,247,0.25)] z-50 text-xs text-white"
                   >
-                    <div className="p-2 border-b border-white/10 mb-2">
-                      <div className="text-white/50 text-[10px] uppercase tracking-wider mb-1">
-                        Connected Account
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 mb-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">
+                          Connected Account
+                        </span>
+                        <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                          {networkId}
+                        </span>
                       </div>
-                      <div className="font-mono text-white text-xs truncate mb-2">
+                      <div className="font-mono text-white text-xs truncate mb-2 font-semibold">
                         {accountId}
                       </div>
                       <div className="flex items-center gap-2">
                         <button
+                          type="button"
                           onClick={handleCopy}
-                          className="flex items-center gap-1 px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-white/90 text-[11px]"
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white/90 text-[11px] font-medium transition-colors cursor-pointer"
                         >
-                          {copied ? <Check className="w-3 h-3 text-purple-400" /> : <Copy className="w-3 h-3" />}
+                          {copied ? (
+                            <Check className="w-3 h-3 text-purple-400" />
+                          ) : (
+                            <Copy className="w-3 h-3" />
+                          )}
                           <span>{copied ? 'Copied' : 'Copy'}</span>
                         </button>
                         <a
-                          href={`https://testnet.nearblocks.io/address/${accountId}`}
+                          href={`https://${networkId === 'mainnet' ? '' : 'testnet.'}nearblocks.io/address/${accountId}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex items-center gap-1 px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-white/90 text-[11px]"
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white/90 text-[11px] font-medium transition-colors"
                         >
                           <ExternalLink className="w-3 h-3" />
                           <span>Explorer</span>
@@ -157,60 +196,68 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </div>
                     </div>
 
-                    {/* Quick Demo Accounts */}
+                    {/* Quick Action: Connect Another Wallet */}
                     <div className="p-2 border-b border-white/10 mb-2">
                       <button
+                        type="button"
                         onClick={() => {
                           setShowWalletMenu(false);
                           connect();
                         }}
-                        className="w-full flex items-center gap-2 px-2 py-1.5 rounded bg-white/10 hover:bg-white/15 text-white text-[11px] font-medium transition-colors mb-2"
+                        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] hover:border-purple-500/30 border border-transparent text-white text-[11px] font-medium transition-all mb-2 cursor-pointer"
                       >
                         <Wallet className="w-3.5 h-3.5 text-purple-400" />
                         <span>Connect Another Wallet / Address</span>
                       </button>
 
-                      <div className="text-white/50 text-[10px] uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                      <div className="text-white/50 text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1 font-semibold">
                         <Sparkles className="w-3 h-3 text-purple-400" />
                         <span>Demo Test Profiles</span>
                       </div>
                       <div className="flex flex-col gap-1">
                         <button
+                          type="button"
                           onClick={() => {
                             simulateAccount('clean-merchant.testnet');
                             setShowWalletMenu(false);
                           }}
-                          className="text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] text-purple-300"
+                          className="text-left px-2.5 py-1.5 rounded-lg hover:bg-white/10 text-[11px] text-purple-300 hover:text-white transition-colors cursor-pointer flex items-center justify-between"
                         >
-                          clean-merchant.testnet (Clean)
+                          <span>clean-merchant.testnet</span>
+                          <span className="text-[10px] text-emerald-400">Clean</span>
                         </button>
                         <button
+                          type="button"
                           onClick={() => {
                             simulateAccount('scammer-sybil.testnet');
                             setShowWalletMenu(false);
                           }}
-                          className="text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] text-rose-300"
+                          className="text-left px-2.5 py-1.5 rounded-lg hover:bg-white/10 text-[11px] text-rose-300 hover:text-white transition-colors cursor-pointer flex items-center justify-between"
                         >
-                          scammer-sybil.testnet (Flagged)
+                          <span>scammer-sybil.testnet</span>
+                          <span className="text-[10px] text-rose-400">Flagged</span>
                         </button>
                         <button
+                          type="button"
                           onClick={() => {
                             simulateAccount('fresh-user.testnet');
                             setShowWalletMenu(false);
                           }}
-                          className="text-left px-2 py-1 rounded hover:bg-white/10 text-[11px] text-amber-300"
+                          className="text-left px-2.5 py-1.5 rounded-lg hover:bg-white/10 text-[11px] text-amber-300 hover:text-white transition-colors cursor-pointer flex items-center justify-between"
                         >
-                          fresh-user.testnet (Inconclusive)
+                          <span>fresh-user.testnet</span>
+                          <span className="text-[10px] text-amber-400">Inconclusive</span>
                         </button>
                       </div>
                     </div>
 
                     <button
+                      type="button"
                       onClick={() => {
                         disconnect();
                         setShowWalletMenu(false);
                       }}
-                      className="w-full flex items-center gap-2 px-2 py-1.5 rounded text-rose-400 hover:bg-rose-500/10 text-left transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-rose-400 hover:bg-rose-500/10 text-left transition-colors cursor-pointer text-xs font-semibold"
                     >
                       <LogOut className="w-3.5 h-3.5" />
                       <span>Disconnect Wallet</span>

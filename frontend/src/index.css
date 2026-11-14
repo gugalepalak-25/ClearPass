@@ -53,6 +53,11 @@ body {
   overflow: hidden;
 }
 
+.liquid-glass.overflow-visible,
+.overflow-visible.liquid-glass {
+  overflow: visible !important;
+}
+
 .liquid-glass::before {
   content: "";
   position: absolute;
