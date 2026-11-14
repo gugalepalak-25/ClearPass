@@ -31,7 +31,7 @@ export interface NearWalletContextType {
   clearSimulatedAccount: () => void;
 }
 
-const NearWalletContext = createContext<NearWalletContextType | null>(null);
+export const NearWalletContext = createContext<NearWalletContextType | null>(null);
 
 export const NearWalletProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selector, setSelector] = useState<WalletSelector | null>(null);

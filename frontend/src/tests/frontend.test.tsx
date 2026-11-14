@@ -5,6 +5,8 @@ import App from '../App.js';
 import { TrustNotice } from '../components/TrustNotice.js';
 import { StatCard } from '../components/StatCard.js';
 import { ErrorBoundary } from '../components/ErrorBoundary.js';
+import { Navbar } from '../components/Navbar.js';
+import { NearWalletContext, NearWalletContextType } from '../wallet/NearWalletContext.js';
 import { Shield } from 'lucide-react';
 
 beforeAll(() => {
@@ -85,5 +87,62 @@ describe('ClearPass Frontend Component Suite', () => {
     expect(screen.getByText('Reload Module')).toBeTruthy();
 
     spy.mockRestore();
+  });
+
+  it('renders connected wallet dropdown when down-arrow is clicked', () => {
+    const mockDisconnect = vi.fn();
+    const mockOpenWalletModal = vi.fn();
+    const mockSimulate = vi.fn();
+
+    const mockWalletValue: NearWalletContextType = {
+      selector: null,
+      modal: null,
+      accountId: 'clean-merchant.testnet',
+      networkId: 'testnet',
+      setNetworkId: vi.fn(),
+      isConnected: true,
+      isSimulated: false,
+      isConnecting: false,
+      isWalletModalOpen: false,
+      connectionError: null,
+      connect: vi.fn(),
+      connectWalletById: vi.fn(),
+      connectAccount: vi.fn(),
+      openWalletModal: mockOpenWalletModal,
+      closeWalletModal: vi.fn(),
+      disconnect: mockDisconnect,
+      simulateAccount: mockSimulate,
+      clearSimulatedAccount: vi.fn(),
+    };
+
+    render(
+      <NearWalletContext.Provider value={mockWalletValue}>
+        <Navbar activeTab="landing" onSelectTab={vi.fn()} />
+      </NearWalletContext.Provider>
+    );
+
+    // Connected button should display truncated account
+    const walletButton = screen.getByText(/clean-merchant\.testnet/i);
+    expect(walletButton).toBeTruthy();
+
+    // Dropdown items should not be in the document before click
+    expect(screen.queryByText('Connected Account')).toBeNull();
+
+    // Click the wallet button to toggle dropdown menu
+    fireEvent.click(walletButton);
+
+    // Dropdown items should now be visible
+    expect(screen.getByText('Connected Account')).toBeTruthy();
+    expect(screen.getByText('testnet')).toBeTruthy();
+    expect(screen.getByText('Explorer')).toBeTruthy();
+    expect(screen.getByText('Demo Test Profiles')).toBeTruthy();
+    expect(screen.getByText('Disconnect Wallet')).toBeTruthy();
+    expect(screen.getByText('Connect Another Wallet / Address')).toBeTruthy();
+    expect(screen.getByText(/scammer-sybil\.testnet/i)).toBeTruthy();
+
+    // Clicking Disconnect should call disconnect handler
+    const disconnectButton = screen.getByText('Disconnect Wallet');
+    fireEvent.click(disconnectButton);
+    expect(mockDisconnect).toHaveBeenCalled();
   });
 });
